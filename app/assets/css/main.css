@@ -1,0 +1,433 @@
+/* ============================================
+   Natal Chart — Mystical Dark Theme
+   ============================================ */
+
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+  --color-gold: #CA8A04;
+  --color-gold-light: #EAB308;
+  --color-deep-purple: #0f0a1e;
+  --color-surface: #1a1230;
+  --color-surface-light: #241a3d;
+  --color-text-muted: #a78bfa;
+}
+
+/* Force dark mode */
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-deep-purple);
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================
+   Animated Star Background
+   ============================================ */
+
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--duration, 3s) ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: var(--max-opacity, 0.8);
+  }
+}
+
+/* ============================================
+   Mystical Glow Effects
+   ============================================ */
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(124, 58, 237, 0.5),
+    0 0 40px rgba(124, 58, 237, 0.3);
+}
+
+.glow-gold {
+  text-shadow: 0 0 20px rgba(202, 138, 4, 0.5),
+    0 0 40px rgba(202, 138, 4, 0.3);
+}
+
+.glow-border {
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.2),
+    inset 0 0 15px rgba(124, 58, 237, 0.05);
+}
+
+/* ============================================
+   Card Styles
+   ============================================ */
+
+.card-mystical {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-light) 100%);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   Gradient Backgrounds
+   ============================================ */
+
+.gradient-mystical {
+  background: linear-gradient(180deg,
+      var(--color-deep-purple) 0%,
+      #1a0f2e 50%,
+      var(--color-deep-purple) 100%);
+}
+
+/* ============================================
+   Cosmic Orb Animation (Welcome Page)
+   ============================================ */
+
+.cosmic-orb {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+      rgba(167, 139, 250, 0.6) 0%,
+      rgba(124, 58, 237, 0.4) 30%,
+      rgba(76, 29, 149, 0.3) 60%,
+      rgba(30, 27, 75, 0.2) 100%);
+  box-shadow:
+    0 0 40px rgba(124, 58, 237, 0.4),
+    0 0 80px rgba(124, 58, 237, 0.2),
+    0 0 120px rgba(124, 58, 237, 0.1),
+    inset 0 0 30px rgba(167, 139, 250, 0.3);
+  animation: cosmic-float 6s ease-in-out infinite,
+    cosmic-glow 4s ease-in-out infinite alternate;
+}
+
+.cosmic-orb::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  animation: cosmic-ring 8s linear infinite;
+}
+
+.cosmic-orb::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  border: 1px dashed rgba(124, 58, 237, 0.1);
+  animation: cosmic-ring 12s linear infinite reverse;
+}
+
+@keyframes cosmic-float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes cosmic-glow {
+  0% {
+    box-shadow: 0 0 40px rgba(124, 58, 237, 0.4), 0 0 80px rgba(124, 58, 237, 0.2);
+  }
+
+  100% {
+    box-shadow: 0 0 60px rgba(167, 139, 250, 0.5), 0 0 120px rgba(124, 58, 237, 0.3);
+  }
+}
+
+@keyframes cosmic-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   Stagger Entrance Animation
+   ============================================ */
+
+.stagger-enter {
+  animation: stagger-in 0.5s ease-out both;
+}
+
+.stagger-enter:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.stagger-enter:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.stagger-enter:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.stagger-enter:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.stagger-enter:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.stagger-enter:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+.stagger-enter:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+.stagger-enter:nth-child(8) {
+  animation-delay: 0.4s;
+}
+
+@keyframes stagger-in {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================
+   Zodiac Sign Pulse
+   ============================================ */
+
+.zodiac-pulse {
+  animation: zodiac-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes zodiac-glow {
+  0% {
+    filter: brightness(1);
+  }
+
+  100% {
+    filter: brightness(1.15);
+  }
+}
+
+/* ============================================
+   Loading Spinner
+   ============================================ */
+
+.shimmer {
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(124, 58, 237, 0.1) 50%,
+      transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.zodiac-spin {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   Progress Bar
+   ============================================ */
+
+.progress-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: progress-shine 2s ease-in-out infinite;
+}
+
+@keyframes progress-shine {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 200%;
+  }
+}
+
+/* ============================================
+   Telegram Viewport Fixes
+   ============================================ */
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+/* ============================================
+   Page Transitions
+   ============================================ */
+
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* Fade */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide up */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Scale fade (for modals) */
+.scale-fade-enter-active,
+.scale-fade-leave-active {
+  transition: all 0.2s ease;
+}
+
+.scale-fade-enter-from,
+.scale-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* ============================================
+   Report Content Styles
+   ============================================ */
+
+.report-content p {
+  margin-bottom: 0.5rem;
+}
+
+.report-content strong {
+  display: block;
+  margin-top: 1rem;
+  color: rgb(196 181 253);
+  /* violet-200 */
+  font-weight: 600;
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .star {
+    animation: none;
+    opacity: 0.3;
+  }
+
+  .shimmer {
+    animation: none;
+  }
+
+  .cosmic-orb {
+    animation: none;
+  }
+
+  .cosmic-orb::before,
+  .cosmic-orb::after {
+    animation: none;
+  }
+
+  .zodiac-spin {
+    animation: none;
+  }
+
+  .stagger-enter {
+    animation: none;
+    opacity: 1;
+  }
+
+  .page-enter-active,
+  .page-leave-active,
+  .fade-enter-active,
+  .fade-leave-active,
+  .slide-up-enter-active,
+  .slide-up-leave-active,
+  .scale-fade-enter-active,
+  .scale-fade-leave-active {
+    transition: none;
+  }
+}

@@ -1,0 +1,157 @@
+{
+    "app": {
+        "title": "Natal Chart",
+        "subtitle": "Discover the secrets of the stars"
+    },
+    "welcome": {
+        "heading": "Discover Your Destiny",
+        "description": "Get a personalized natal chart with AI-powered interpretation. Learn how the planets influence your life.",
+        "cta": "Create My Natal Chart",
+        "ctaCompatibility": "Check Compatibility",
+        "features": {
+            "chart": "Personal Chart",
+            "ai": "AI Interpretation",
+            "instant": "Instant Results",
+            "compatibility": "Compatibility"
+        }
+    },
+    "form": {
+        "title": "Birth Data",
+        "subtitle": "Fill in your details to calculate the natal chart",
+        "birthDate": "Date of Birth",
+        "birthTime": "Time of Birth",
+        "birthCity": "Place of Birth",
+        "cityPlaceholder": "Start typing a city name...",
+        "submit": "Calculate Chart",
+        "errors": {
+            "birthDateRequired": "Date of birth is required",
+            "birthTimeRequired": "Time of birth is required",
+            "birthCityRequired": "Place of birth is required"
+        }
+    },
+    "loading": {
+        "title": "Calculating your chart...",
+        "titleReport": "Preparing your report...",
+        "fetchingChart": "Loading chart...",
+        "steps": {
+            "planets": "Determining planetary positions...",
+            "houses": "Calculating houses...",
+            "aspects": "Analyzing aspects...",
+            "ai": "AI is preparing interpretation..."
+        }
+    },
+    "report": {
+        "title": "Your Natal Chart",
+        "basicTitle": "Brief Overview",
+        "fullTitle": "Full Report",
+        "sections": {
+            "personality": "Personality",
+            "strengths": "Strengths",
+            "challenges": "Challenges",
+            "love": "Love & Relationships",
+            "career": "Career & Calling"
+        },
+        "planets": {
+            "title": "Planets",
+            "sun": "Sun",
+            "moon": "Moon",
+            "ascendant": "Ascendant",
+            "mercury": "Mercury",
+            "venus": "Venus",
+            "mars": "Mars",
+            "jupiter": "Jupiter",
+            "saturn": "Saturn"
+        },
+        "house": "House",
+        "premium": "Premium",
+        "analysis": "Detailed Interpretation",
+        "unlockFull": "Unlock Full Report",
+        "generating": "Generating report..."
+    },
+    "paywall": {
+        "title": "Full Report",
+        "description": "Get a detailed interpretation of all aspects of your natal chart",
+        "feature1": "Detailed personality analysis",
+        "feature2": "Relationship compatibility",
+        "feature3": "Career recommendations",
+        "feature4": "Yearly forecast",
+        "feature5": "Karmic lessons",
+        "price": "299 ⭐",
+        "cta": "Unlock Now",
+        "cancel": "Not Now"
+    },
+    "errors": {
+        "generic": "An error occurred. Please try again.",
+        "network": "Network error. Check your connection.",
+        "generation": "Could not generate the chart. Please try later."
+    },
+    "nav": {
+        "home": "Home",
+        "newChart": "New Chart",
+        "back": "Back"
+    },
+    "compatibility": {
+        "form": {
+            "title": "Compatibility Check",
+            "subtitle": "Discover how compatible you are based on the stars",
+            "person1": "Person 1",
+            "person2": "Person 2",
+            "namePlaceholder": "Name (optional)",
+            "submit": "Calculate Compatibility",
+            "tryAgain": "Try Again",
+            "errors": {
+                "birthDateRequired": "Date of birth is required",
+                "birthTimeRequired": "Time of birth is required",
+                "birthCityRequired": "Place of birth is required"
+            }
+        },
+        "loading": {
+            "title": "Analyzing compatibility...",
+            "steps": {
+                "charts": "Calculating both charts...",
+                "aspects": "Analyzing cross-chart aspects...",
+                "ai": "AI is preparing interpretation..."
+            }
+        },
+        "scores": {
+            "overall": "Overall Compatibility",
+            "emotional": "Emotional",
+            "passion": "Passion",
+            "communication": "Communication",
+            "values": "Values"
+        },
+        "result": {
+            "overallTitle": "Your Compatibility",
+            "bigThree": "Big Three Comparison",
+            "interpretation": "Compatibility Interpretation"
+        },
+        "paywall": {
+            "title": "Full Compatibility Analysis",
+            "description": "Get a detailed AI interpretation of your compatibility across all aspects",
+            "feature1": "Detailed emotional connection analysis",
+            "feature2": "Communication and values breakdown",
+            "feature3": "Harmonization recommendations",
+            "feature4": "Growth areas and couple potential",
+            "price": "199 ⭐",
+            "cta": "Unlock Now",
+            "cancel": "Not Now"
+        },
+        "preview": {
+            "lockedTitle": "Full Interpretation",
+            "lockedDescription": "Unlock the detailed AI analysis of your compatibility",
+            "unlock": "Unlock Full Analysis"
+        }
+    },
+    "history": {
+        "title": "My Charts",
+        "subtitle": "View your previously created charts and reports",
+        "tabs": {
+            "charts": "Natal Charts",
+            "compatibility": "Compatibility"
+        },
+        "premium": "Premium",
+        "emptyCharts": "You don't have any natal charts yet",
+        "emptyCompatibility": "You don't have any compatibility reports yet",
+        "myCharts": "My Charts"
+    }
+}
