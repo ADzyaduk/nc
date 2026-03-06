@@ -3,7 +3,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="text-center px-4">
+  <div class="text-center w-full max-w-full min-w-0 overflow-hidden px-1">
     <!-- Cosmic orb with animation -->
     <div class="relative mx-auto mb-8 w-40 h-40 flex items-center justify-center">
       <div class="cosmic-orb flex items-center justify-center">
@@ -29,42 +29,36 @@ const { t } = useI18n()
       {{ t('welcome.description') }}
     </p>
 
-    <!-- Features with stagger entrance -->
-    <div class="flex justify-center gap-4 sm:gap-6 mb-10">
+    <!-- Features: 4 иконки, чтобы помещались на узком экране -->
+    <div class="flex justify-center gap-3 sm:gap-4 mb-10">
       <div class="text-center stagger-enter">
-        <div class="w-12 h-12 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-2 zodiac-pulse">
-          <span class="text-xl">🔭</span>
+        <div class="w-11 h-11 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
+          <span class="text-lg">🔭</span>
         </div>
         <span class="text-xs text-violet-300">{{ t('welcome.features.chart') }}</span>
       </div>
       <div class="text-center stagger-enter">
-        <div class="w-12 h-12 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-2 zodiac-pulse">
-          <span class="text-xl">🤖</span>
-        </div>
-        <span class="text-xs text-violet-300">{{ t('welcome.features.ai') }}</span>
-      </div>
-      <div class="text-center stagger-enter">
-        <div class="w-12 h-12 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-2 zodiac-pulse">
-          <span class="text-xl">⚡</span>
+        <div class="w-11 h-11 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
+          <span class="text-lg">⚡</span>
         </div>
         <span class="text-xs text-violet-300">{{ t('welcome.features.instant') }}</span>
       </div>
       <div class="text-center stagger-enter">
-        <div class="w-12 h-12 rounded-xl bg-pink-500/15 border border-pink-500/25 flex items-center justify-center mx-auto mb-2 zodiac-pulse">
+        <div class="w-11 h-11 rounded-xl bg-pink-500/15 border border-pink-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
           <UIcon name="i-heroicons-heart" class="size-5 text-pink-400" />
         </div>
         <span class="text-xs text-pink-300">{{ t('welcome.features.compatibility') }}</span>
       </div>
       <div class="text-center stagger-enter">
-        <div class="w-12 h-12 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center mx-auto mb-2 zodiac-pulse">
-          <span class="text-xl">🔮</span>
+        <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
+          <span class="text-lg">🔮</span>
         </div>
         <span class="text-xs text-amber-300">{{ t('welcome.features.tarot') }}</span>
       </div>
     </div>
 
-    <!-- CTA Buttons -->
-    <div class="space-y-3 stagger-enter">
+    <!-- CTA Buttons: строго по ширине контейнера -->
+    <div class="space-y-3 stagger-enter w-full max-w-full min-w-0">
       <UButton
         size="xl"
         color="primary"
@@ -74,7 +68,7 @@ const { t } = useI18n()
         icon="i-heroicons-arrow-right"
         trailing
         block
-        class="cursor-pointer shadow-lg shadow-violet-600/30"
+        class="cursor-pointer shadow-lg shadow-violet-600/30 w-full max-w-full min-w-0"
       />
       <UButton
         size="xl"
@@ -85,7 +79,7 @@ const { t } = useI18n()
         icon="i-heroicons-heart"
         trailing
         block
-        class="cursor-pointer border-pink-500/30 text-pink-300 hover:bg-pink-500/10"
+        class="cursor-pointer border-pink-500/30 text-pink-300 hover:bg-pink-500/10 w-full max-w-full min-w-0"
       />
       <UButton
         size="xl"
@@ -96,7 +90,7 @@ const { t } = useI18n()
         icon="i-heroicons-sparkles"
         trailing
         block
-        class="cursor-pointer border-amber-500/30 text-amber-300 hover:bg-amber-500/10"
+        class="cursor-pointer border-amber-500/30 text-amber-300 hover:bg-amber-500/10 w-full max-w-full min-w-0"
       />
       <UButton
         size="lg"
@@ -107,7 +101,7 @@ const { t } = useI18n()
         icon="i-heroicons-clock"
         trailing
         block
-        class="cursor-pointer text-violet-400 hover:text-violet-300"
+        class="cursor-pointer text-violet-400 hover:text-violet-300 w-full max-w-full min-w-0"
       />
     </div>
   </div>

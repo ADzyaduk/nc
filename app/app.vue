@@ -14,7 +14,7 @@ useHead({
 
 <template>
   <UApp :locale="locales[locale as keyof typeof locales]">
-    <div class="gradient-mystical min-h-screen">
+    <div class="gradient-mystical app-shell">
       <NuxtLayout>
         <NuxtPage :transition="{ name: 'page', mode: 'out-in' }" />
       </NuxtLayout>

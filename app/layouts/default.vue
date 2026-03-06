@@ -3,7 +3,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col relative">
+  <div class="layout-root">
     <!-- Animated stars background -->
     <div class="stars-bg">
       <div
@@ -23,7 +23,7 @@ const { t } = useI18n()
     </div>
 
     <!-- Top bar -->
-    <header class="relative z-10 px-4 py-3 flex items-center justify-between">
+    <header class="layout-header">
       <div class="flex items-center gap-2">
         <UIcon name="i-heroicons-sparkles" class="text-violet-400 size-5" />
         <span class="text-sm font-semibold text-violet-300">{{ t('app.title') }}</span>
@@ -31,8 +31,8 @@ const { t } = useI18n()
       <LanguageSwitcher />
     </header>
 
-    <!-- Main content -->
-    <main class="relative z-10 flex-1 px-4 pb-6 safe-area-bottom">
+    <!-- Main content: scrollable so everything fits on mobile -->
+    <main class="layout-main safe-area-bottom">
       <slot />
     </main>
   </div>

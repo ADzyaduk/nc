@@ -74,7 +74,7 @@ export default defineNuxtConfig({
     head: {
       title: 'Natal Chart',
       meta: [
-        { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover' },
         { name: 'theme-color', content: '#0f0a1e' },
       ],
       script: [
