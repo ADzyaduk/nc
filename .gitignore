@@ -22,3 +22,6 @@ logs
 .env
 .env.*
 !.env.example
+
+# Env dumps / paste files (never commit)
+34
