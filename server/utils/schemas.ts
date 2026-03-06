@@ -96,3 +96,11 @@ export const generateCompatibilitySchema = z.object({
     telegramId: z.string().min(1),
     locale: z.enum(['ru', 'en']).default('ru'),
 })
+
+// ---- Tarot ----
+
+export const tarotReadingSchema = z.object({
+    question: z.string().min(1, 'Question is required').max(500),
+    telegramId: z.string().min(1),
+    locale: z.enum(['ru', 'en']).default('ru'),
+})

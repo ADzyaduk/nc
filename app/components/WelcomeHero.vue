@@ -30,7 +30,7 @@ const { t } = useI18n()
     </p>
 
     <!-- Features with stagger entrance -->
-    <div class="flex justify-center gap-6 mb-10">
+    <div class="flex justify-center gap-4 sm:gap-6 mb-10">
       <div class="text-center stagger-enter">
         <div class="w-12 h-12 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-2 zodiac-pulse">
           <span class="text-xl">🔭</span>
@@ -54,6 +54,12 @@ const { t } = useI18n()
           <UIcon name="i-heroicons-heart" class="size-5 text-pink-400" />
         </div>
         <span class="text-xs text-pink-300">{{ t('welcome.features.compatibility') }}</span>
+      </div>
+      <div class="text-center stagger-enter">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center mx-auto mb-2 zodiac-pulse">
+          <span class="text-xl">🔮</span>
+        </div>
+        <span class="text-xs text-amber-300">{{ t('welcome.features.tarot') }}</span>
       </div>
     </div>
 
@@ -80,6 +86,17 @@ const { t } = useI18n()
         trailing
         block
         class="cursor-pointer border-pink-500/30 text-pink-300 hover:bg-pink-500/10"
+      />
+      <UButton
+        size="xl"
+        color="neutral"
+        variant="outline"
+        :label="t('welcome.ctaTarot')"
+        to="/tarot"
+        icon="i-heroicons-sparkles"
+        trailing
+        block
+        class="cursor-pointer border-amber-500/30 text-amber-300 hover:bg-amber-500/10"
       />
       <UButton
         size="lg"

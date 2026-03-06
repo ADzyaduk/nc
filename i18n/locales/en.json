@@ -8,11 +8,13 @@
         "description": "Get a personalized natal chart with AI-powered interpretation. Learn how the planets influence your life.",
         "cta": "Create My Natal Chart",
         "ctaCompatibility": "Check Compatibility",
+        "ctaTarot": "Tarot Reading",
         "features": {
             "chart": "Personal Chart",
             "ai": "AI Interpretation",
             "instant": "Instant Results",
-            "compatibility": "Compatibility"
+            "compatibility": "Compatibility",
+            "tarot": "Tarot"
         }
     },
     "form": {
@@ -147,6 +149,33 @@
             "lockedTitle": "Full Interpretation",
             "lockedDescription": "Unlock the detailed AI analysis of your compatibility",
             "unlock": "Unlock Full Analysis"
+        }
+    },
+    "tarot": {
+        "title": "Tarot Reading",
+        "subtitle": "Ask a question — the cards will reveal the answer",
+        "placeholder": "Describe your situation or ask a question...",
+        "hint": "At least 3 characters",
+        "cta": "Get Reading ✨",
+        "priceHint": "Reading costs 50 ⭐",
+        "loading": "Drawing cards...",
+        "loadingSubtitle": "The cards are being drawn and AI is preparing the interpretation. This will take 10-15 seconds.",
+        "paying": "Processing payment...",
+        "interpretation": "Reading Interpretation",
+        "yourQuestion": "Your question",
+        "newReading": "New Reading",
+        "tryAgain": "Try Again",
+        "paywall": {
+            "title": "Tarot Reading",
+            "description": "Get a personalized 3-card Major Arcana spread with AI interpretation",
+            "feature1": "3 Major Arcana cards",
+            "feature2": "Positions: Situation — Challenge — Advice",
+            "feature3": "Personal AI interpretation",
+            "feature4": "Cards linked to your question",
+            "feature5": "Detailed spread analysis",
+            "price": "50 ⭐",
+            "cta": "Get Reading",
+            "cancel": "Not Now"
         }
     },
     "history": {

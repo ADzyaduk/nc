@@ -1,4 +1,5 @@
 import type { NatalChartData, SynastryData, CompatibilityScores } from './schemas'
+import type { TarotCard } from './tarot'
 
 interface OpenRouterMessage {
     role: 'system' | 'user' | 'assistant'
@@ -331,6 +332,82 @@ export async function generateCompatibilityInterpretation(
         console.warn('OpenRouter API failed for compatibility, using fallback:', error.message)
         return generateFallbackCompatibility(synastry, type, locale)
     }
+}
+
+// ---- Tarot Reading Interpretation ----
+
+function buildTarotSystemPrompt(locale: string): string {
+    const lang = locale === 'ru' ? 'Russian' : 'English'
+    return `You are a mystical tarot reader with deep knowledge of the Major Arcana and decades of experience interpreting the cards.
+Respond ONLY in ${lang}.
+Write in a mystical, wise, and compassionate tone — like an experienced oracle sharing sacred wisdom.
+
+IMPORTANT INTERPRETATION RULES:
+- You will receive the FULL MEANING of each card. Use this meaning as the foundation for your interpretation.
+- Adapt the card's meaning to the querent's SPECIFIC QUESTION — do not give a generic reading.
+- Each card's meaning shifts depending on its POSITION in the spread (Situation, Challenge, or Advice).
+- Connect the three cards into a COHERENT NARRATIVE — they tell a story together, not three separate stories.
+- Be concrete and actionable, especially in the Advice section.
+
+The spread uses three positions:
+1. Situation — the current state of affairs, what energies surround the querent now
+2. Challenge — the main obstacle, difficulty, or what blocks progress
+3. Advice — guidance, recommended action, and wisdom for moving forward
+
+FORMATTING RULES (STRICT — follow exactly):
+- Use **bold text** for section titles, followed immediately by the content on the SAME line or a blank line before a new paragraph.
+- FORBIDDEN: Never put a section title alone on one line and then start the next line with ": text".
+- Do NOT use markdown headers (##, ###). Use **bold** for section names only.
+- Double newline only between main sections/paragraphs.
+- Write approximately 500-700 words total.`
+}
+
+function buildTarotReadingPrompt(question: string, cards: TarotCard[], locale: string): string {
+    const lang = locale === 'ru' ? 'Russian' : 'English'
+    const isRu = locale === 'ru'
+
+    const positions = isRu
+        ? ['Ситуация', 'Препятствие', 'Совет']
+        : ['Situation', 'Challenge', 'Advice']
+
+    const cardDescriptions = cards.map((card, i) => {
+        const name = isRu ? card.nameRu : card.name
+        const keywords = isRu ? card.keywordsRu.join(', ') : card.keywords.join(', ')
+        const meaning = isRu ? card.meaningRu : card.meaning
+        return `--- Position ${i + 1}: ${positions[i]} ---
+Card: ${name} (${card.name})
+Keywords: ${keywords}
+Card Meaning: ${meaning}`
+    }).join('\n\n')
+
+    return `Querent's question: "${question}"
+
+TAROT SPREAD (Situation — Challenge — Advice):
+
+${cardDescriptions}
+
+Generate a tarot reading interpretation in ${lang}. Structure:
+1. **${positions[0]}** — interpret the first card's meaning in relation to the querent's question. How does this card describe their current situation? What energies are at play right now?
+2. **${positions[1]}** — interpret the second card as the obstacle. What aspect of this card's meaning reveals what is blocking the querent? What inner or outer challenge must they face?
+3. **${positions[2]}** — interpret the third card as guidance. Based on this card's wisdom, what specific actions or mindset shifts should the querent adopt?
+4. **${isRu ? 'Итог' : 'Summary'}** — weave all three cards together into one cohesive message. How do they tell a unified story from situation through challenge to advice?
+
+CRITICAL: Base your interpretation on the card meanings provided above. Adapt them specifically to the querent's question — do not give a generic reading.`
+}
+
+export async function generateTarotInterpretation(
+    question: string,
+    cards: TarotCard[],
+    apiKey: string,
+    modelId: string,
+    locale: string = 'ru',
+): Promise<string> {
+    const messages: OpenRouterMessage[] = [
+        { role: 'system', content: buildTarotSystemPrompt(locale) },
+        { role: 'user', content: buildTarotReadingPrompt(question, cards, locale) },
+    ]
+
+    return await callOpenRouter(messages, apiKey, modelId)
 }
 
 /**

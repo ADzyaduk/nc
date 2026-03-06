@@ -3,28 +3,33 @@ const { t } = useI18n()
 
 const open = defineModel<boolean>('open', { default: false })
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   isPaying: boolean
-}>()
+  i18nPrefix?: string
+}>(), {
+  i18nPrefix: 'paywall',
+})
 
 const emit = defineEmits<{
   pay: []
 }>()
 
+const p = computed(() => props.i18nPrefix)
+
 const features = computed(() => [
-  t('paywall.feature1'),
-  t('paywall.feature2'),
-  t('paywall.feature3'),
-  t('paywall.feature4'),
-  t('paywall.feature5'),
+  t(`${p.value}.feature1`),
+  t(`${p.value}.feature2`),
+  t(`${p.value}.feature3`),
+  t(`${p.value}.feature4`),
+  t(`${p.value}.feature5`),
 ])
 </script>
 
 <template>
   <UModal
     v-model:open="open"
-    :title="t('paywall.title')"
-    :description="t('paywall.description')"
+    :title="t(`${p}.title`)"
+    :description="t(`${p}.description`)"
     :ui="{
       content: 'card-mystical border border-violet-500/30',
       title: 'sr-only',
@@ -40,10 +45,10 @@ const features = computed(() => [
 
         <!-- Title -->
         <h2 class="text-xl font-bold text-white mb-2">
-          {{ t('paywall.title') }}
+          {{ t(`${p}.title`) }}
         </h2>
         <p class="text-sm text-violet-300/80 mb-6">
-          {{ t('paywall.description') }}
+          {{ t(`${p}.description`) }}
         </p>
 
         <!-- Features list -->
@@ -62,7 +67,7 @@ const features = computed(() => [
 
         <!-- Price -->
         <div class="mb-6">
-          <span class="text-3xl font-bold text-white glow-gold">{{ t('paywall.price') }}</span>
+          <span class="text-3xl font-bold text-white glow-gold">{{ t(`${p}.price`) }}</span>
         </div>
 
         <!-- Buttons -->
@@ -73,7 +78,7 @@ const features = computed(() => [
             variant="solid"
             block
             :loading="isPaying"
-            :label="t('paywall.cta')"
+            :label="t(`${p}.cta`)"
             icon="i-heroicons-lock-open"
             class="cursor-pointer shadow-lg shadow-violet-600/30"
             @click="emit('pay')"
@@ -83,7 +88,7 @@ const features = computed(() => [
             color="neutral"
             variant="ghost"
             block
-            :label="t('paywall.cancel')"
+            :label="t(`${p}.cancel`)"
             class="cursor-pointer"
             @click="open = false"
           />
