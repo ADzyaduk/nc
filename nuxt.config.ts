@@ -17,9 +17,16 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  // Supabase config — module reads SUPABASE_URL, SUPABASE_KEY, SUPABASE_SECRET_KEY from .env automatically
+  // Supabase config
   supabase: {
+    // Используем переменные окружения как с префиксом NUXT_, так и без —
+    // чтобы работало и локально, и на Amvera.
+    url: process.env.NUXT_SUPABASE_URL || process.env.SUPABASE_URL,
+    key: process.env.NUXT_SUPABASE_KEY || process.env.SUPABASE_KEY,
+    serviceKey: process.env.NUXT_SUPABASE_SECRET_KEY || process.env.SUPABASE_SECRET_KEY,
     redirect: false,
+    // В SPA режиме безопаснее хранить сессии в localStorage, а не в SSR‑cookies
+    useSsrCookies: false,
   },
 
   // i18n config
@@ -35,9 +42,19 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '',
-    openrouterApiKey: process.env.OPENROUTER_API_KEY || '',
-    openrouterModelId: process.env.OPENROUTER_MODEL_ID || 'mistralai/mistral-7b-instruct',
+    // Поддерживаем и NUXT_* (как в Amvera), и «голые» имена (как в .env локально)
+    telegramBotToken:
+      process.env.NUXT_TELEGRAM_BOT_TOKEN ||
+      process.env.TELEGRAM_BOT_TOKEN ||
+      '',
+    openrouterApiKey:
+      process.env.NUXT_OPENROUTER_API_KEY ||
+      process.env.OPENROUTER_API_KEY ||
+      '',
+    openrouterModelId:
+      process.env.NUXT_OPENROUTER_MODEL_ID ||
+      process.env.OPENROUTER_MODEL_ID ||
+      'mistralai/mistral-7b-instruct',
   },
 
   // SPA mode — Telegram Mini App doesn't benefit from SSR
