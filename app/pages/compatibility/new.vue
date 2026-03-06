@@ -9,6 +9,8 @@ definePageMeta({
 })
 
 onMounted(() => {
+  currentStep.value = 'idle'
+
   telegram.showBackButton(() => {
     router.push('/')
   })
@@ -16,7 +18,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   telegram.hideBackButton()
-  currentStep.value = 'idle'
 })
 </script>
 
@@ -24,9 +25,12 @@ onUnmounted(() => {
   <div class="max-w-md mx-auto pt-4 relative">
     <BackButton />
 
-    <CompatibilityLoading 
-      v-if="isProcessing" 
-      :step="currentStep" 
+    <LoadingOverlay
+      v-if="isProcessing"
+      variant="card"
+      :title="t('loading.titleCompatibility')"
+      :subtitle="t('loading.subtitleCompatibility')"
+      icon="i-heroicons-heart"
     />
 
     <UCard

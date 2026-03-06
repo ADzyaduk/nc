@@ -3,7 +3,10 @@ import { CalendarDate } from '@internationalized/date'
 
 const { t } = useI18n()
 const router = useRouter()
+const compatibilityStore = useCompatibilityStore()
 const { createCompatibility, isProcessing } = useCompatibility()
+
+const submitError = ref<string | null>(null)
 
 const birthDateValue1 = ref<CalendarDate>()
 const birthDateValue2 = ref<CalendarDate>()
@@ -87,6 +90,8 @@ function validate(): boolean {
 async function handleSubmit() {
   if (!validate()) return
 
+  submitError.value = null
+
   try {
     const report = await createCompatibility(
       {
@@ -112,7 +117,7 @@ async function handleSubmit() {
     }
   }
   catch {
-    // Error handled in store
+    submitError.value = compatibilityStore.error || t('errors.generic')
   }
 }
 </script>
@@ -270,6 +275,12 @@ async function handleSubmit() {
           {{ errors.person2.birthCity }}
         </p>
       </div>
+    </div>
+
+    <!-- Error -->
+    <div v-if="submitError" class="rounded-lg bg-red-500/10 border border-red-500/20 p-3 flex items-start gap-2">
+      <UIcon name="i-heroicons-exclamation-triangle" class="size-5 text-red-400 shrink-0 mt-0.5" />
+      <p class="text-sm text-red-300">{{ submitError }}</p>
     </div>
 
     <!-- Submit -->

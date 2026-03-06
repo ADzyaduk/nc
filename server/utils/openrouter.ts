@@ -22,21 +22,41 @@ export async function callOpenRouter(
     apiKey: string,
     modelId: string,
 ): Promise<string> {
-    const response = await $fetch<OpenRouterResponse>('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': 'https://natal-chart.app',
-            'X-Title': 'Natal Chart',
-        },
-        body: {
-            model: modelId,
-            messages,
-            max_tokens: 4096,
-            temperature: 0.7,
-        },
-    })
+    const controller = new AbortController()
+    const timeoutMs = 20000
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+
+    let response: OpenRouterResponse
+    try {
+        response = await $fetch<OpenRouterResponse>('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+                'HTTP-Referer': 'https://natal-chart.app',
+                'X-Title': 'Natal Chart',
+            },
+            body: {
+                model: modelId,
+                messages,
+                max_tokens: 4096,
+                temperature: 0.7,
+            },
+            signal: controller.signal,
+        })
+    }
+    catch (error: any) {
+        if (error?.name === 'AbortError') {
+            throw createError({
+                statusCode: 504,
+                statusMessage: `OpenRouter request timed out after ${timeoutMs}ms`,
+            })
+        }
+        throw error
+    }
+    finally {
+        clearTimeout(timeoutId)
+    }
 
     if (!response.choices?.[0]?.message?.content) {
         throw createError({

@@ -17,9 +17,9 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  // Supabase config
+  // Supabase config — module reads SUPABASE_URL, SUPABASE_KEY, SUPABASE_SECRET_KEY from .env automatically
   supabase: {
-    redirect: false, // Telegram auth, not Supabase auth
+    redirect: false,
   },
 
   // i18n config
@@ -34,17 +34,10 @@ export default defineNuxtConfig({
     detectBrowserLanguage: false, // We detect from Telegram
   },
 
-  // Runtime config for secrets
   runtimeConfig: {
     telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '',
-    supabaseSecretKey: process.env.SUPABASE_SECRET_KEY || '',
-    supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
     openrouterApiKey: process.env.OPENROUTER_API_KEY || '',
     openrouterModelId: process.env.OPENROUTER_MODEL_ID || 'mistralai/mistral-7b-instruct',
-    public: {
-      supabaseUrl: process.env.SUPABASE_URL || '',
-      supabaseKey: process.env.SUPABASE_KEY || '',
-    },
   },
 
   // SPA mode — Telegram Mini App doesn't benefit from SSR

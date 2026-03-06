@@ -29,11 +29,9 @@ onMounted(async () => {
   const hasPrefetchedChart = !!chartStore.currentChart
   const hasPrefetchedReport = !!(reportStore.basicReport || reportStore.fullReport)
 
-  // Если пришли по прямой ссылке или после обновления страницы — подгружаем всё с сервера
   if (!hasPrefetchedChart || !hasPrefetchedReport) {
     await loadChartData()
 
-    // Если отчёта до сих пор нет, генерируем его уже на странице карты (fallback-сценарий)
     if (!reportStore.basicReport && !reportStore.fullReport && chartStore.currentChart) {
       generateBasicReport(chartId.value).catch(() => {})
     }
@@ -75,24 +73,37 @@ async function loadChartData() {
   }
 }
 
-const isLoading = computed(() => isFetchingData.value)
+const isLoading = computed(() =>
+  isFetchingData.value
+  || (!chartStore.currentChart && !fetchError.value && !chartStore.error && !reportStore.error),
+)
 
 const hasChart = computed(() => !!chartStore.currentChart)
 const hasBasicOverview = computed(() => !!reportStore.basicReport)
 const hasFullReport = computed(() => !!reportStore.fullReport && reportStore.fullReport.is_paid)
+
+const loadingTitle = computed(() => {
+  if (isUnlocking.value) return t('report.unlocking')
+  return t('loading.fetchingChart')
+})
+
+const loadingIcon = computed(() => {
+  if (isUnlocking.value) return 'i-heroicons-lock-open'
+  return 'i-heroicons-sparkles'
+})
 
 function openPaywall() {
   showPaywall.value = true
 }
 
 async function handlePayment() {
+  showPaywall.value = false
   isUnlocking.value = true
   try {
     await unlockFullReport(chartId.value)
-    showPaywall.value = false
     try { telegram.hapticFeedback('success') } catch { }
   }
-  catch (error) {
+  catch {
     try { telegram.hapticFeedback('error') } catch { }
   }
   finally {
@@ -118,31 +129,13 @@ async function handlePayment() {
       />
     </div>
 
-    <!-- Light loading: only while fetching chart data (no heavy ChartLoading to avoid double-mount flicker) -->
-    <UCard v-if="isLoading" variant="outline" :ui="{ root: 'card-mystical glow-border' }">
-      <div class="py-8 text-center">
-        <div class="relative mx-auto mb-4 w-12 h-12">
-          <div class="absolute inset-0 rounded-full border-2 border-t-violet-400 border-r-violet-400/20 border-b-transparent border-l-transparent animate-spin" />
-        </div>
-        <p class="text-violet-200">{{ t('loading.fetchingChart') }}</p>
-      </div>
-    </UCard>
-
-    <!-- Unlocking full report loading -->
-    <template v-else-if="isUnlocking">
-      <UCard variant="outline" :ui="{ root: 'card-mystical glow-border' }">
-        <div class="py-8 text-center">
-          <div class="relative mx-auto mb-6 w-16 h-16">
-            <div class="absolute inset-0 rounded-full border-2 border-t-amber-400 border-r-amber-400/20 border-b-transparent border-l-transparent animate-spin" />
-            <div class="absolute inset-4 rounded-full bg-amber-500/15 flex items-center justify-center">
-              <span class="text-xl">🔓</span>
-            </div>
-          </div>
-          <h2 class="text-lg font-semibold text-white mb-2">{{ t('report.unlocking') }}</h2>
-          <p class="text-sm text-violet-300/70">{{ t('loading.steps.ai') }}</p>
-        </div>
-      </UCard>
-    </template>
+    <!-- Loading / Unlocking -->
+    <LoadingOverlay
+      v-if="isLoading || isUnlocking"
+      variant="card"
+      :title="loadingTitle"
+      :icon="loadingIcon"
+    />
 
     <!-- Full report -->
     <template v-else-if="hasFullReport">
@@ -162,14 +155,13 @@ async function handlePayment() {
     </template>
 
     <!-- Chart loaded, report still generating -->
-    <UCard v-else-if="hasChart && !hasBasicOverview && !hasFullReport" variant="outline" :ui="{ root: 'card-mystical glow-border' }">
-      <div class="py-8 text-center">
-        <div class="relative mx-auto mb-4 w-12 h-12">
-          <div class="absolute inset-0 rounded-full border-2 border-t-violet-400 border-r-violet-400/20 border-b-transparent border-l-transparent animate-spin" />
-        </div>
-        <p class="text-violet-200">{{ t('loading.titleReport') }}</p>
-      </div>
-    </UCard>
+    <LoadingOverlay
+      v-else-if="hasChart && !hasBasicOverview && !hasFullReport"
+      variant="card"
+      :title="t('loading.titleReport')"
+      :subtitle="t('loading.subtitleChart')"
+      icon="i-heroicons-sparkles"
+    />
 
     <!-- Error state -->
     <UCard v-else-if="fetchError || chartStore.error || reportStore.error" variant="outline" :ui="{ root: 'card-mystical' }">
@@ -185,6 +177,14 @@ async function handlePayment() {
         />
       </div>
     </UCard>
+
+    <!-- Fallback: prevents blank screen -->
+    <LoadingOverlay
+      v-else
+      variant="card"
+      :title="t('loading.fetchingChart')"
+      icon="i-heroicons-sparkles"
+    />
 
     <!-- Paywall modal -->
     <PaywallModal

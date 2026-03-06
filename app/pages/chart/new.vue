@@ -8,8 +8,9 @@ definePageMeta({
   layout: 'default',
 })
 
-// Show Telegram Back Button
 onMounted(() => {
+  currentStep.value = 'idle'
+
   telegram.showBackButton(() => {
     router.push('/')
   })
@@ -17,8 +18,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   telegram.hideBackButton()
-  // Only reset the step indicator — preserve store data so [id].vue doesn't refetch
-  currentStep.value = 'idle'
 })
 </script>
 
@@ -26,9 +25,12 @@ onUnmounted(() => {
   <div class="max-w-md mx-auto pt-4 relative">
     <BackButton />
 
-    <ChartLoading 
-      v-if="isProcessing" 
-      :step="currentStep" 
+    <LoadingOverlay
+      v-if="isProcessing"
+      variant="card"
+      :title="t('loading.titleChart')"
+      :subtitle="t('loading.subtitleChart')"
+      icon="i-heroicons-sparkles"
     />
 
     <UCard

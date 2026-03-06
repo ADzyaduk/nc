@@ -1,12 +1,11 @@
-import { serverSupabaseClient } from '#supabase/server'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import type { H3Event } from 'h3'
 import type { Database } from '~~/app/types/database.types'
 
 /**
- * Gets the Supabase client for server-side use.
- * Uses @nuxtjs/supabase's built-in server client which handles
- * headers, auth, and key format correctly.
+ * Server-side Supabase client with service role (bypasses RLS).
+ * Uses SUPABASE_SECRET_KEY from .env.
  */
 export async function useSupabaseAdmin(event: H3Event) {
-    return await serverSupabaseClient<Database>(event)
+    return serverSupabaseServiceRole<Database>(event)
 }
