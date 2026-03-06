@@ -37,7 +37,7 @@ const ASPECT_TYPES = [
 function getZodiacSign(longitude: number): string {
     const normalized = ((longitude % 360) + 360) % 360
     const signIndex = Math.floor(normalized / 30)
-    return ZODIAC_SIGNS[signIndex]
+    return ZODIAC_SIGNS[signIndex]!
 }
 
 /**
@@ -121,14 +121,13 @@ function getHouseNumber(planetLongitude: number, houseCusps: number[]): number {
     const normalized = ((planetLongitude % 360) + 360) % 360
 
     for (let i = 0; i < 12; i++) {
-        const cusp = houseCusps[i]
-        const nextCusp = houseCusps[(i + 1) % 12]
+        const cusp = houseCusps[i]!
+        const nextCusp = houseCusps[(i + 1) % 12]!
 
         if (nextCusp > cusp) {
             if (normalized >= cusp && normalized < nextCusp) return i + 1
         }
         else {
-            // Wraps around 360°
             if (normalized >= cusp || normalized < nextCusp) return i + 1
         }
     }
@@ -210,8 +209,8 @@ export function calculateNatalChart(
     const aspects: ChartAspect[] = []
     for (let i = 0; i < allLongitudes.length; i++) {
         for (let j = i + 1; j < allLongitudes.length; j++) {
-            const p1 = allLongitudes[i]
-            const p2 = allLongitudes[j]
+            const p1 = allLongitudes[i]!
+            const p2 = allLongitudes[j]!
 
             let diff = Math.abs(p1.longitude - p2.longitude)
             if (diff > 180) diff = 360 - diff

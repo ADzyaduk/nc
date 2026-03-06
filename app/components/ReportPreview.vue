@@ -140,7 +140,7 @@ function getPlanetLabel(key: string): string {
       @click="emit('unlock')"
     >
       <div class="text-center py-3">
-        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-600/20 border border-amber-500/30 flex items-center justify-center mx-auto mb-3">
+        <div class="w-14 h-14 rounded-full bg-linear-to-br from-amber-500/20 to-orange-600/20 border border-amber-500/30 flex items-center justify-center mx-auto mb-3">
           <span class="text-2xl">🔮</span>
         </div>
         <p class="text-lg font-bold text-white mb-1">

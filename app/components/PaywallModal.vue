@@ -34,7 +34,7 @@ const features = computed(() => [
     <template #content>
       <div class="p-6 text-center">
         <!-- Icon -->
-        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30 flex items-center justify-center mx-auto mb-4">
+        <div class="w-16 h-16 rounded-full bg-linear-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30 flex items-center justify-center mx-auto mb-4">
           <UIcon name="i-heroicons-star" class="size-8 text-amber-400" />
         </div>
 
@@ -53,7 +53,7 @@ const features = computed(() => [
             :key="idx"
             class="flex items-center gap-2.5"
           >
-            <div class="w-5 h-5 rounded-full bg-violet-500/20 flex items-center justify-center flex-shrink-0">
+            <div class="w-5 h-5 rounded-full bg-violet-500/20 flex items-center justify-center shrink-0">
               <UIcon name="i-heroicons-check" class="size-3 text-violet-400" />
             </div>
             <span class="text-sm text-violet-100">{{ feature }}</span>

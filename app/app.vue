@@ -4,10 +4,10 @@ import * as locales from '@nuxt/ui/locale'
 const { t, locale } = useI18n()
 
 useHead({
-  title: t('app.title'),
+  title: () => t('app.title'),
   htmlAttrs: {
     class: 'dark',
-    lang: locale.value,
+    lang: () => locale.value,
   },
 })
 </script>

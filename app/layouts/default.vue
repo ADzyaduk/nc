@@ -32,7 +32,7 @@ const { t } = useI18n()
     </header>
 
     <!-- Main content -->
-    <main class="relative z-10 flex-1 px-4 pb-6">
+    <main class="relative z-10 flex-1 px-4 pb-6 safe-area-bottom">
       <slot />
     </main>
   </div>

@@ -6,7 +6,7 @@ const languages = [
   { code: 'en', label: 'EN' },
 ] as const
 
-async function switchLocale(code: string) {
+async function switchLocale(code: 'ru' | 'en') {
   await setLocale(code)
   if (import.meta.client) {
     localStorage.setItem('natal-chart-locale', code)

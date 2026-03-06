@@ -22,6 +22,8 @@
         "birthTime": "Time of Birth",
         "birthCity": "Place of Birth",
         "cityPlaceholder": "Start typing a city name...",
+        "cityHint": "Type at least 2 characters",
+        "cityEmpty": "City not found, try another name",
         "submit": "Calculate Chart",
         "errors": {
             "birthDateRequired": "Date of birth is required",
@@ -32,6 +34,10 @@
     "loading": {
         "title": "Calculating your chart...",
         "titleReport": "Preparing your report...",
+        "titleChart": "Building your natal chart...",
+        "subtitleChart": "This may take 10-15 seconds. Please wait while the AI analyzes the star positions.",
+        "titleCompatibility": "Analyzing compatibility...",
+        "subtitleCompatibility": "The AI is comparing horoscopes and writing a report, this will take about 10-15 seconds.",
         "fetchingChart": "Loading chart...",
         "steps": {
             "planets": "Determining planetary positions...",
@@ -66,7 +72,8 @@
         "premium": "Premium",
         "analysis": "Detailed Interpretation",
         "unlockFull": "Unlock Full Report",
-        "generating": "Generating report..."
+        "generating": "Generating report...",
+        "unlocking": "Unlocking full report..."
     },
     "paywall": {
         "title": "Full Report",

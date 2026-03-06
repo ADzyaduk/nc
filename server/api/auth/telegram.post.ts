@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
         if (existingUser.username !== username) {
             await supabase
                 .from('users')
-                .update({ username })
+                .update({ telegram_id: telegramId, username })
                 .eq('telegram_id', telegramId)
         }
         return { user: existingUser, language_code: telegramData.user.language_code || 'ru' }

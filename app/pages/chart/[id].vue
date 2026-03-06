@@ -88,7 +88,6 @@ function openPaywall() {
 async function handlePayment() {
   isUnlocking.value = true
   try {
-    const telegramId = telegram.telegramId.value || 'dev-user'
     await unlockFullReport(chartId.value)
     showPaywall.value = false
     try { telegram.hapticFeedback('success') } catch { }

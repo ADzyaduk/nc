@@ -19,18 +19,18 @@ export const useUserStore = defineStore('user', () => {
         error.value = null
 
         try {
-            const { data } = await useFetch('/api/auth/telegram', {
+            const data = await $fetch<{ user: User }>('/api/auth/telegram', {
                 method: 'POST',
                 body: { initData },
             })
 
-            if (data.value?.user) {
-                user.value = data.value.user
-                return data.value
+            if (data.user) {
+                user.value = data.user
+                return data
             }
         }
         catch (e: any) {
-            error.value = e.message || 'Authentication failed'
+            error.value = e.data?.message || e.message || 'Authentication failed'
             throw e
         }
         finally {

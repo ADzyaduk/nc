@@ -5,11 +5,9 @@ const { t } = useI18n()
 const router = useRouter()
 const { createCompatibility, isProcessing } = useCompatibility()
 
-// CalendarDate refs for UInputDate
 const birthDateValue1 = ref<CalendarDate>()
 const birthDateValue2 = ref<CalendarDate>()
 
-// Person 1 form
 const person1 = reactive({
   name: '',
   birthDate: '',
@@ -19,7 +17,6 @@ const person1 = reactive({
   longitude: 0,
 })
 
-// Person 2 form
 const person2 = reactive({
   name: '',
   birthDate: '',
@@ -29,91 +26,38 @@ const person2 = reactive({
   longitude: 0,
 })
 
-// Sync CalendarDate → string
 function calendarDateToString(val: CalendarDate | undefined): string {
   if (!val) return ''
   return `${val.year}-${String(val.month).padStart(2, '0')}-${String(val.day).padStart(2, '0')}`
 }
 
-watch(birthDateValue1, (val) => {
-  person1.birthDate = calendarDateToString(val)
-})
-
-watch(birthDateValue2, (val) => {
-  person2.birthDate = calendarDateToString(val)
-})
+watch(birthDateValue1, val => { person1.birthDate = calendarDateToString(val) })
+watch(birthDateValue2, val => { person2.birthDate = calendarDateToString(val) })
 
 const errors = reactive({
   person1: { birthDate: '', birthTime: '', birthCity: '' },
   person2: { birthDate: '', birthTime: '', birthCity: '' },
 })
 
-// ---- City autocomplete for Person 1 ----
-interface CityItem {
-  label: string
-  latitude: number
-  longitude: number
-}
+const { searchTerm: searchTerm1, items: cityItems1, isLoading: isCityLoading1, selectedLabel: selectedCityLabel1, selectCity: selectCity1 } = useCitySearch()
+const { searchTerm: searchTerm2, items: cityItems2, isLoading: isCityLoading2, selectedLabel: selectedCityLabel2, selectCity: selectCity2 } = useCitySearch()
 
-const searchTerm1 = ref('')
-const cityItems1 = ref<CityItem[]>([])
-const isCityLoading1 = ref(false)
-const selectedCityLabel1 = ref<string>('')
-let debounceTimer1: ReturnType<typeof setTimeout> | undefined
-
-async function fetchCities(query: string, items: Ref<CityItem[]>, loading: Ref<boolean>) {
-  if (query.length < 2) {
-    items.value = []
-    return
-  }
-  loading.value = true
-  try {
-    const data = await $fetch<{ cities: CityItem[] }>('/api/cities/search', {
-      params: { q: query },
-    })
-    items.value = data.cities || []
-  }
-  catch {
-    items.value = []
-  }
-  finally {
-    loading.value = false
-  }
-}
-
-watch(searchTerm1, (val) => {
-  if (debounceTimer1) clearTimeout(debounceTimer1)
-  debounceTimer1 = setTimeout(() => fetchCities(val, cityItems1, isCityLoading1), 350)
-})
-
-function handleCitySelect1(item: CityItem) {
-  if (item && typeof item === 'object') {
-    person1.birthCity = item.label
-    person1.latitude = item.latitude
-    person1.longitude = item.longitude
-    selectedCityLabel1.value = item.label
+function handleCitySelect1(labelValue: string) {
+  const found = selectCity1(labelValue)
+  if (found) {
+    person1.birthCity = found.label
+    person1.latitude = found.latitude
+    person1.longitude = found.longitude
     errors.person1.birthCity = ''
   }
 }
 
-// ---- City autocomplete for Person 2 ----
-const searchTerm2 = ref('')
-const cityItems2 = ref<CityItem[]>([])
-const isCityLoading2 = ref(false)
-const selectedCityLabel2 = ref<string>('')
-let debounceTimer2: ReturnType<typeof setTimeout> | undefined
-
-watch(searchTerm2, (val) => {
-  if (debounceTimer2) clearTimeout(debounceTimer2)
-  debounceTimer2 = setTimeout(() => fetchCities(val, cityItems2, isCityLoading2), 350)
-})
-
-function handleCitySelect2(item: CityItem) {
-  if (item && typeof item === 'object') {
-    person2.birthCity = item.label
-    person2.latitude = item.latitude
-    person2.longitude = item.longitude
-    selectedCityLabel2.value = item.label
+function handleCitySelect2(labelValue: string) {
+  const found = selectCity2(labelValue)
+  if (found) {
+    person2.birthCity = found.label
+    person2.latitude = found.latitude
+    person2.longitude = found.longitude
     errors.person2.birthCity = ''
   }
 }
@@ -232,10 +176,7 @@ async function handleSubmit() {
           :ignore-filter="true"
           :highlight="!!errors.person1.birthCity"
           :ui="{ root: 'w-full' }"
-          @update:model-value="(val: any) => {
-            const found = cityItems1.find(c => c.label === val)
-            if (found) handleCitySelect1(found)
-          }"
+          @update:model-value="(val: any) => handleCitySelect1(val)"
         >
           <template #empty>
             <div class="text-sm text-violet-400/60 px-3 py-2">
@@ -251,13 +192,13 @@ async function handleSubmit() {
 
     <!-- Divider with hearts -->
     <div class="flex items-center gap-3 py-2">
-      <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-500/30 to-transparent" />
+      <div class="flex-1 h-px bg-linear-to-r from-transparent via-pink-500/30 to-transparent" />
       <div class="flex gap-1">
         <UIcon name="i-heroicons-heart" class="size-4 text-pink-400 animate-pulse" />
         <UIcon name="i-heroicons-heart" class="size-5 text-pink-500" />
         <UIcon name="i-heroicons-heart" class="size-4 text-pink-400 animate-pulse" />
       </div>
-      <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-500/30 to-transparent" />
+      <div class="flex-1 h-px bg-linear-to-r from-transparent via-pink-500/30 to-transparent" />
     </div>
 
     <!-- Person 2 -->
@@ -317,10 +258,7 @@ async function handleSubmit() {
           :ignore-filter="true"
           :highlight="!!errors.person2.birthCity"
           :ui="{ root: 'w-full' }"
-          @update:model-value="(val: any) => {
-            const found = cityItems2.find(c => c.label === val)
-            if (found) handleCitySelect2(found)
-          }"
+          @update:model-value="(val: any) => handleCitySelect2(val)"
         >
           <template #empty>
             <div class="text-sm text-violet-400/60 px-3 py-2">

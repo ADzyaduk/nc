@@ -13,14 +13,14 @@ defineProps<{
       <div class="relative mx-auto mb-8 w-32 h-32 flex items-center justify-center">
         <!-- Orb 1 -->
         <div
-          class="absolute w-14 h-14 rounded-full bg-gradient-to-br from-pink-500/40 to-pink-600/20 border border-pink-500/30 flex items-center justify-center transition-all duration-1000"
+          class="absolute w-14 h-14 rounded-full bg-linear-to-br from-pink-500/40 to-pink-600/20 border border-pink-500/30 flex items-center justify-center transition-all duration-1000"
           :class="step === 'interpreting' ? 'translate-x-0' : '-translate-x-6'"
         >
           <UIcon name="i-heroicons-heart" class="size-6 text-pink-400" />
         </div>
         <!-- Orb 2 -->
         <div
-          class="absolute w-14 h-14 rounded-full bg-gradient-to-br from-violet-500/40 to-violet-600/20 border border-violet-500/30 flex items-center justify-center transition-all duration-1000"
+          class="absolute w-14 h-14 rounded-full bg-linear-to-br from-violet-500/40 to-violet-600/20 border border-violet-500/30 flex items-center justify-center transition-all duration-1000"
           :class="step === 'interpreting' ? 'translate-x-0' : 'translate-x-6'"
         >
           <UIcon name="i-heroicons-heart" class="size-6 text-violet-400" />

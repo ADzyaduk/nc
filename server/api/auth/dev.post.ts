@@ -1,4 +1,8 @@
 export default defineEventHandler(async (event) => {
+    if (!import.meta.dev) {
+        throw createError({ statusCode: 403, statusMessage: 'Dev endpoint is disabled in production' })
+    }
+
     const supabase = await useSupabaseAdmin(event)
     const devTelegramId = 'dev-user'
 

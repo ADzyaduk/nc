@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  // Disable @nuxt/fonts (Fontsource API) — avoids "Could not fetch from api.fontsource.org" when offline/unreachable
+  ui: {
+    fonts: false,
+  },
+
   modules: [
     '@nuxt/ui',
     '@nuxtjs/supabase',

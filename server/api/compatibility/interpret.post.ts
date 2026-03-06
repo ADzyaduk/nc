@@ -67,17 +67,28 @@ export default defineEventHandler(async (event) => {
         locale
     )
 
-    // 5. Update row
-    const { data: updatedReport, error } = await supabase
-        .from('compatibility_reports')
-        .update({ content })
-        .eq('id', reportId)
-        .select()
-        .single()
+    // 5. Update row in database (best effort)
+    let updatedReport = report
 
-    if (error) {
-        throw createError({ statusCode: 500, statusMessage: 'Failed to update compatibility report' })
+    try {
+        const { data, error } = await supabase
+            .from('compatibility_reports')
+            .update({ content })
+            .eq('id', reportId)
+            .select()
+            .maybeSingle()
+
+        if (!error && data) {
+            updatedReport = data
+        }
+        else if (error) {
+            console.warn('[compatibility/interpret] Failed to persist compatibility report content:', error)
+        }
+    }
+    catch (e) {
+        console.warn('[compatibility/interpret] Unexpected error while updating report:', e)
     }
 
-    return { report: updatedReport }
+    // Always return a report to the client, even if DB update failed
+    return { report: { ...updatedReport, content } }
 })

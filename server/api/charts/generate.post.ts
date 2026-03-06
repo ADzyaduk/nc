@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
             birth_city: birthCity,
             latitude,
             longitude,
-            chart_json: chartJson,
+            chart_json: chartJson as unknown as import('~~/app/types/database.types').Json,
         })
         .select()
         .single()

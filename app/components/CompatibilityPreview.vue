@@ -2,6 +2,7 @@
 const { t } = useI18n()
 const { translateSign, getSignIcon, getElementBgColor } = useZodiac()
 const { cleanContent } = useReportRenderer()
+const { animateScore, getCircleDashArray } = useScoreAnimation()
 
 const props = defineProps<{
   report: {
@@ -79,18 +80,6 @@ const animatedScores = ref<Record<string, number>>({
   values: 0,
 })
 
-function animateScore(target: number, setter: (v: number) => void, delay: number = 0) {
-  setTimeout(() => {
-    let current = 0
-    const step = Math.ceil(target / 40)
-    const interval = setInterval(() => {
-      current = Math.min(current + step, target)
-      setter(current)
-      if (current >= target) clearInterval(interval)
-    }, 25)
-  }, delay)
-}
-
 onMounted(() => {
   animateScore(props.report.scores.overall, v => animatedOverall.value = v, 200)
   animateScore(props.report.scores.emotional, v => animatedScores.value.emotional = v, 400)
@@ -98,13 +87,6 @@ onMounted(() => {
   animateScore(props.report.scores.communication, v => animatedScores.value.communication = v, 600)
   animateScore(props.report.scores.values, v => animatedScores.value.values = v, 700)
 })
-
-// SVG ring helpers
-function getCircleDashArray(score: number, radius: number = 45): string {
-  const circumference = 2 * Math.PI * radius
-  const filled = (score / 100) * circumference
-  return `${filled} ${circumference - filled}`
-}
 
 const person1Label = computed(() => props.report.person1_name || t('compatibility.form.person1'))
 const person2Label = computed(() => props.report.person2_name || t('compatibility.form.person2'))
@@ -252,7 +234,7 @@ const previewSnippet = computed(() => {
         </div>
 
         <!-- Gradient overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0f0a1a] via-[#0f0a1a]/80 to-transparent" />
+        <div class="absolute inset-0 bg-linear-to-t from-[#0f0a1a] via-[#0f0a1a]/80 to-transparent" />
 
         <!-- Unlock CTA -->
         <div class="absolute inset-0 flex flex-col items-center justify-center">

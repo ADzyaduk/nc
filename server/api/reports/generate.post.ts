@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const content = await generateInterpretation(
-        chart.chart_json,
+        chart.chart_json as unknown as import('~~/server/utils/schemas').NatalChartData,
         type,
         config.openrouterApiKey,
         config.openrouterModelId,
@@ -91,7 +91,7 @@ export default defineEventHandler(async (event) => {
             birth_chart_id: birthChartId,
             type,
             content,
-            is_paid: type === 'basic' || type === 'full',
+            is_paid: type === 'full',
         })
         .select()
         .single()

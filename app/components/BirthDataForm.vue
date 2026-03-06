@@ -5,8 +5,7 @@ const { t } = useI18n()
 const router = useRouter()
 const { createChart, generateBasicReport, isProcessing } = useNatalChart()
 
-// Form data
-const birthDateValue = ref<CalendarDate>() 
+const birthDateValue = ref<CalendarDate>()
 
 const form = reactive({
   birthDate: '',
@@ -16,7 +15,6 @@ const form = reactive({
   longitude: 0,
 })
 
-// Sync CalendarDate → string
 watch(birthDateValue, (val) => {
   if (val) {
     form.birthDate = `${val.year}-${String(val.month).padStart(2, '0')}-${String(val.day).padStart(2, '0')}`
@@ -32,63 +30,14 @@ const errors = reactive({
   birthCity: '',
 })
 
-// ---- City autocomplete ----
-interface CityItem {
-  label: string
-  latitude: number
-  longitude: number
-}
+const { searchTerm: citySearchTerm, items: cityItems, isLoading: isCityLoading, selectedLabel: selectedCityLabel, selectCity } = useCitySearch()
 
-const searchTerm = ref('')
-const cityItems = ref<CityItem[]>([])
-const isCityLoading = ref(false)
-const citySelected = ref(false)
-let debounceTimer: ReturnType<typeof setTimeout> | undefined
-
-// Debounced fetch from Nominatim API
-async function fetchCities(query: string) {
-  if (query.length < 2) {
-    cityItems.value = []
-    return
-  }
-
-  isCityLoading.value = true
-  try {
-    const data = await $fetch<{ cities: CityItem[] }>('/api/cities/search', {
-      params: { q: query },
-    })
-    cityItems.value = data.cities || []
-  }
-  catch {
-    cityItems.value = []
-  }
-  finally {
-    isCityLoading.value = false
-  }
-}
-
-// Watch search term with debounce
-watch(searchTerm, (val) => {
-  if (citySelected.value) {
-    citySelected.value = false
-    return
-  }
-  if (debounceTimer) clearTimeout(debounceTimer)
-  debounceTimer = setTimeout(() => {
-    fetchCities(val)
-  }, 350)
-})
-
-// When city is selected from dropdown
-const selectedCityLabel = ref<string>('')
-
-function handleCitySelect(item: CityItem) {
-  if (item && typeof item === 'object') {
-    form.birthCity = item.label
-    form.latitude = item.latitude
-    form.longitude = item.longitude
-    selectedCityLabel.value = item.label
-    citySelected.value = true
+function handleCitySelect(labelValue: string) {
+  const found = selectCity(labelValue)
+  if (found) {
+    form.birthCity = found.label
+    form.latitude = found.latitude
+    form.longitude = found.longitude
     errors.birthCity = ''
   }
 }
@@ -129,9 +78,13 @@ async function handleSubmit() {
     })
 
     if (chart) {
-      // Сначала дожидаемся базового отчёта, чтобы использовать один лоадер на экране формы
-      await generateBasicReport(chart.id)
-
+      // Один лоадер: ждём базовый отчёт, потом переход. При ошибке отчёта всё равно переходим.
+      try {
+        await generateBasicReport(chart.id)
+      }
+      catch {
+        // отчёт догрузится на странице карты
+      }
       await router.push(`/chart/${chart.id}`)
     }
   }
@@ -145,8 +98,9 @@ async function handleSubmit() {
   <form class="space-y-5" @submit.prevent="handleSubmit">
     <!-- Date of Birth -->
     <div>
-      <label class="block text-sm font-medium text-violet-200 mb-1.5">
-        📅 {{ t('form.birthDate') }}
+      <label class="flex items-center gap-1.5 text-sm font-medium text-violet-200 mb-1.5">
+        <UIcon name="i-heroicons-calendar-days" class="size-4 text-violet-400" />
+        {{ t('form.birthDate') }}
       </label>
       <DatePicker
         v-model="birthDateValue"
@@ -160,8 +114,9 @@ async function handleSubmit() {
 
     <!-- Time of Birth -->
     <div>
-      <label class="block text-sm font-medium text-violet-200 mb-1.5">
-        🕐 {{ t('form.birthTime') }}
+      <label class="flex items-center gap-1.5 text-sm font-medium text-violet-200 mb-1.5">
+        <UIcon name="i-heroicons-clock" class="size-4 text-violet-400" />
+        {{ t('form.birthTime') }}
       </label>
       <UInput
         v-model="form.birthTime"
@@ -177,12 +132,13 @@ async function handleSubmit() {
 
     <!-- Place of Birth (autocomplete) -->
     <div>
-      <label class="block text-sm font-medium text-violet-200 mb-1.5">
-        📍 {{ t('form.birthCity') }}
+      <label class="flex items-center gap-1.5 text-sm font-medium text-violet-200 mb-1.5">
+        <UIcon name="i-heroicons-map-pin" class="size-4 text-violet-400" />
+        {{ t('form.birthCity') }}
       </label>
       <UInputMenu
         v-model="selectedCityLabel"
-        v-model:search-term="searchTerm"
+        v-model:search-term="citySearchTerm"
         :items="cityItems"
         value-key="label"
         size="lg"
@@ -193,14 +149,11 @@ async function handleSubmit() {
         :ignore-filter="true"
         :highlight="!!errors.birthCity"
         :ui="{ root: 'w-full' }"
-        @update:model-value="(val: any) => {
-          const found = cityItems.find(c => c.label === val)
-          if (found) handleCitySelect(found)
-        }"
+        @update:model-value="(val: any) => handleCitySelect(val)"
       >
         <template #empty>
           <div class="text-sm text-violet-400/60 px-3 py-2">
-            {{ searchTerm.length < 2 ? t('form.cityHint') : t('form.cityEmpty') }}
+            {{ citySearchTerm.length < 2 ? t('form.cityHint') : t('form.cityEmpty') }}
           </div>
         </template>
       </UInputMenu>
