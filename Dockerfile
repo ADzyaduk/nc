@@ -3,6 +3,14 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+# URL и anon-ключ нужны при сборке (Nuxt подставляет их в конфиг).
+# В Amvera: добавь переменные в «Переменные окружения» — если платформа передаёт их при сборке, билд подхватит.
+# Или передай при ручной сборке: docker build --build-arg SUPABASE_URL=... --build-arg SUPABASE_KEY=... .
+ARG SUPABASE_URL
+ARG SUPABASE_KEY
+ENV SUPABASE_URL=${SUPABASE_URL}
+ENV SUPABASE_KEY=${SUPABASE_KEY}
+
 COPY package.json package-lock.json* ./
 RUN npm ci
 

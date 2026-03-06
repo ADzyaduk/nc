@@ -17,15 +17,13 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  // Supabase config
+  // Supabase: url/key должны быть при сборке (в Docker передать через build-args / build env).
+  // secretKey подхватится при запуске контейнера из SUPABASE_SECRET_KEY.
   supabase: {
-    // Используем переменные окружения как с префиксом NUXT_, так и без —
-    // чтобы работало и локально, и на Amvera.
-    url: process.env.NUXT_SUPABASE_URL || process.env.SUPABASE_URL,
-    key: process.env.NUXT_SUPABASE_KEY || process.env.SUPABASE_KEY,
-    serviceKey: process.env.NUXT_SUPABASE_SECRET_KEY || process.env.SUPABASE_SECRET_KEY,
+    url: process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL || process.env.NUXT_SUPABASE_URL,
+    key: process.env.SUPABASE_KEY || process.env.NUXT_PUBLIC_SUPABASE_KEY || process.env.NUXT_SUPABASE_KEY,
+    secretKey: process.env.SUPABASE_SECRET_KEY || process.env.NUXT_SUPABASE_SECRET_KEY,
     redirect: false,
-    // В SPA режиме безопаснее хранить сессии в localStorage, а не в SSR‑cookies
     useSsrCookies: false,
   },
 
@@ -42,7 +40,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Поддерживаем и NUXT_* (как в Amvera), и «голые» имена (как в .env локально)
+    // Секреты только на сервере
     telegramBotToken:
       process.env.NUXT_TELEGRAM_BOT_TOKEN ||
       process.env.TELEGRAM_BOT_TOKEN ||
