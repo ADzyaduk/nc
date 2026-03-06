@@ -17,12 +17,13 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
-  // Supabase: url/key должны быть при сборке (в Docker передать через build-args / build env).
-  // secretKey подхватится при запуске контейнера из SUPABASE_SECRET_KEY.
+  // Для локальной разработки модуль может взять значения из SUPABASE_* на старте dev/build.
+  // Для продакшена на Amvera публичные значения нужно передавать через NUXT_PUBLIC_SUPABASE_*,
+  // чтобы Nitro подставил их в runtimeConfig при запуске контейнера.
   supabase: {
-    url: process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL || process.env.NUXT_SUPABASE_URL,
-    key: process.env.SUPABASE_KEY || process.env.NUXT_PUBLIC_SUPABASE_KEY || process.env.NUXT_SUPABASE_KEY,
-    secretKey: process.env.SUPABASE_SECRET_KEY || process.env.NUXT_SUPABASE_SECRET_KEY,
+    url: process.env.SUPABASE_URL,
+    key: process.env.SUPABASE_KEY,
+    secretKey: process.env.SUPABASE_SECRET_KEY,
     redirect: false,
     useSsrCookies: false,
   },
@@ -53,26 +54,15 @@ export default defineNuxtConfig({
       process.env.NUXT_OPENROUTER_MODEL_ID ||
       process.env.OPENROUTER_MODEL_ID ||
       'mistralai/mistral-7b-instruct',
-    // Supabase (секретный ключ только на сервере; при старте можно переопределить через NUXT_SUPABASE_SECRET_KEY)
+    // Supabase: приватный ключ переопределяется на рантайме через NUXT_SUPABASE_SECRET_KEY
     supabase: {
-      secretKey:
-        process.env.NUXT_SUPABASE_SECRET_KEY ||
-        process.env.SUPABASE_SECRET_KEY ||
-        '',
+      secretKey: '',
     },
-    // Публичные — доступны на клиенте; при старте можно переопределить через NUXT_PUBLIC_SUPABASE_*
+    // Публичные значения на проде должны приходить именно из NUXT_PUBLIC_SUPABASE_URL/KEY
     public: {
       supabase: {
-        url:
-          process.env.NUXT_PUBLIC_SUPABASE_URL ||
-          process.env.NUXT_SUPABASE_URL ||
-          process.env.SUPABASE_URL ||
-          '',
-        key:
-          process.env.NUXT_PUBLIC_SUPABASE_KEY ||
-          process.env.NUXT_SUPABASE_KEY ||
-          process.env.SUPABASE_KEY ||
-          '',
+        url: '',
+        key: '',
       },
     },
   },
