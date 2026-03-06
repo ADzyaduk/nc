@@ -53,6 +53,28 @@ export default defineNuxtConfig({
       process.env.NUXT_OPENROUTER_MODEL_ID ||
       process.env.OPENROUTER_MODEL_ID ||
       'mistralai/mistral-7b-instruct',
+    // Supabase (секретный ключ только на сервере; при старте можно переопределить через NUXT_SUPABASE_SECRET_KEY)
+    supabase: {
+      secretKey:
+        process.env.NUXT_SUPABASE_SECRET_KEY ||
+        process.env.SUPABASE_SECRET_KEY ||
+        '',
+    },
+    // Публичные — доступны на клиенте; при старте можно переопределить через NUXT_PUBLIC_SUPABASE_*
+    public: {
+      supabase: {
+        url:
+          process.env.NUXT_PUBLIC_SUPABASE_URL ||
+          process.env.NUXT_SUPABASE_URL ||
+          process.env.SUPABASE_URL ||
+          '',
+        key:
+          process.env.NUXT_PUBLIC_SUPABASE_KEY ||
+          process.env.NUXT_SUPABASE_KEY ||
+          process.env.SUPABASE_KEY ||
+          '',
+      },
+    },
   },
 
   // SPA mode — Telegram Mini App doesn't benefit from SSR
