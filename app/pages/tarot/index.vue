@@ -143,7 +143,10 @@ const interpretationHtml = computed(() => renderMarkdown(tarotStore.interpretati
           </template>
 
           <!-- eslint-disable-next-line vue/no-v-html -->
-          <div class="report-content" v-html="interpretationHtml" />
+          <div
+            class="report-content text-sm text-violet-100/80 leading-relaxed space-y-1"
+            v-html="interpretationHtml"
+          />
         </UCard>
       </Transition>
 

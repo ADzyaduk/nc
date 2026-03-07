@@ -80,17 +80,17 @@ function getSunSign(chartJson: any): string {
 </script>
 
 <template>
-  <div class="max-w-md mx-auto pt-4">
+  <div class="max-w-md mx-auto pt-4 h-full flex flex-col min-h-0">
     <BackButton />
 
     <!-- Header -->
-    <div class="text-center mb-6">
+    <div class="text-center mb-6 shrink-0">
       <h1 class="text-xl font-bold text-white">{{ t('history.title') }}</h1>
       <p class="text-sm text-violet-300 mt-1">{{ t('history.subtitle') }}</p>
     </div>
 
     <!-- Tabs -->
-    <div class="flex gap-2 mb-4">
+    <div class="flex gap-2 mb-4 shrink-0">
       <UButton
         :color="activeTab === 'charts' ? 'primary' : 'neutral'"
         :variant="activeTab === 'charts' ? 'solid' : 'ghost'"
@@ -118,7 +118,7 @@ function getSunSign(chartJson: any): string {
 
     <!-- Charts Tab -->
     <template v-else-if="activeTab === 'charts'">
-      <div v-if="chartsData?.charts?.length" class="space-y-3">
+      <div v-if="chartsData?.charts?.length" class="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
         <UCard
           v-for="chart in chartsData.charts"
           :key="chart.id"
@@ -175,7 +175,7 @@ function getSunSign(chartJson: any): string {
 
     <!-- Compatibility Tab -->
     <template v-else-if="activeTab === 'compatibility'">
-      <div v-if="compatData?.reports?.length" class="space-y-3">
+      <div v-if="compatData?.reports?.length" class="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
         <UCard
           v-for="report in compatData.reports"
           :key="report.id"
