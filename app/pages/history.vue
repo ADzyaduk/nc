@@ -80,11 +80,11 @@ function getSunSign(chartJson: any): string {
 </script>
 
 <template>
-  <div class="max-w-md mx-auto pt-4 h-full flex flex-col min-h-0">
+  <div class="w-full pt-4 h-full flex flex-col min-h-0">
     <BackButton />
 
     <!-- Header -->
-    <div class="text-center mb-6 shrink-0">
+    <div class="text-center mb-4 shrink-0">
       <h1 class="text-xl font-bold text-white">{{ t('history.title') }}</h1>
       <p class="text-sm text-violet-300 mt-1">{{ t('history.subtitle') }}</p>
     </div>
@@ -113,20 +113,20 @@ function getSunSign(chartJson: any): string {
 
     <!-- Loading -->
     <div v-if="isLoading" class="space-y-3">
-      <USkeleton v-for="i in 3" :key="i" class="h-20 w-full rounded-xl" />
+      <USkeleton v-for="i in 3" :key="i" class="h-16 w-full rounded-xl" />
     </div>
 
     <!-- Charts Tab -->
     <template v-else-if="activeTab === 'charts'">
-      <div v-if="chartsData?.charts?.length" class="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
+      <div v-if="chartsData?.charts?.length" class="flex-1 min-h-0 overflow-y-auto space-y-3">
         <UCard
           v-for="chart in chartsData.charts"
           :key="chart.id"
           variant="outline"
-          :ui="{ root: 'card-mystical cursor-pointer hover:border-violet-500/40 transition-colors' }"
+          :ui="{ root: 'card-mystical cursor-pointer hover:border-violet-500/40 transition-colors w-full', body: 'p-0' }"
           @click="router.push(`/chart/${chart.id}`)"
         >
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3 py-2">
             <!-- Zodiac icon -->
             <div
               class="w-10 h-10 rounded-lg flex items-center justify-center border shrink-0"
@@ -175,15 +175,15 @@ function getSunSign(chartJson: any): string {
 
     <!-- Compatibility Tab -->
     <template v-else-if="activeTab === 'compatibility'">
-      <div v-if="compatData?.reports?.length" class="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
+      <div v-if="compatData?.reports?.length" class="flex-1 min-h-0 overflow-y-auto space-y-3">
         <UCard
           v-for="report in compatData.reports"
           :key="report.id"
           variant="outline"
-          :ui="{ root: 'card-mystical cursor-pointer hover:border-pink-500/40 transition-colors' }"
+          :ui="{ root: 'card-mystical cursor-pointer hover:border-pink-500/40 transition-colors w-full', body: 'p-0' }"
           @click="router.push(`/compatibility/${report.id}`)"
         >
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3 py-2">
             <!-- Hearts icon -->
             <div class="w-10 h-10 rounded-lg bg-pink-500/15 border border-pink-500/30 flex items-center justify-center shrink-0">
               <UIcon name="i-heroicons-heart" class="size-5 text-pink-400" />

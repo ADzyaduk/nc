@@ -13,6 +13,7 @@ const props = defineProps<{
 const localName = computed(() => locale.value === 'ru' ? props.card.nameRu : props.card.name)
 const localKeywords = computed(() => locale.value === 'ru' ? props.card.keywordsRu : props.card.keywords)
 
+const imageWebp = computed(() => props.card.image.replace(/\.png$/i, '.webp'))
 const imgError = ref(false)
 
 function onImgError() {
@@ -47,12 +48,19 @@ function onImgError() {
         <div class="tarot-card-face tarot-card-front">
           <div class="w-full h-full rounded-xl bg-linear-to-br from-violet-950 via-indigo-950 to-violet-950 border border-amber-500/30 flex flex-col items-center overflow-hidden">
             <div v-if="!imgError" class="flex-1 w-full p-1.5">
-              <img
-                :src="card.image"
-                :alt="localName"
-                class="w-full h-full object-cover rounded-lg"
-                @error="onImgError"
-              >
+              <picture>
+                <source :srcset="imageWebp" type="image/webp">
+                <img
+                  :src="card.image"
+                  :alt="localName"
+                  width="110"
+                  height="165"
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full h-full object-cover rounded-lg"
+                  @error="onImgError"
+                >
+              </picture>
             </div>
             <div v-else class="flex-1 w-full flex items-center justify-center">
               <span class="text-4xl select-none">🃏</span>
