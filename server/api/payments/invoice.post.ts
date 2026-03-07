@@ -52,6 +52,7 @@ export default defineEventHandler(async (event) => {
                 title: product.title,
                 description: product.description,
                 payload,
+                provider_token: '',
                 currency: 'XTR',
                 prices: [{ label: product.label, amount: product.amount }],
             },

@@ -5,9 +5,9 @@ const { t } = useI18n()
 <template>
   <div class="text-center w-full max-w-full min-w-0 overflow-hidden px-1">
     <!-- Cosmic orb with animation -->
-    <div class="relative mx-auto mb-2 w-24 h-24 flex items-center justify-center">
+    <div class="relative mx-auto mb-4 w-40 h-40 flex items-center justify-center">
       <div class="cosmic-orb flex items-center justify-center">
-        <span class="text-3xl select-none" style="filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));">✨</span>
+        <span class="text-4xl select-none" style="filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));">✨</span>
       </div>
       <!-- Orbiting particles -->
       <div class="absolute inset-0 animate-spin" style="animation-duration: 20s;">

@@ -32,7 +32,7 @@ const { t } = useI18n()
     </header>
 
     <!-- Main content: scrollable so everything fits on mobile -->
-    <main class="layout-main safe-area-bottom">
+    <main class="layout-main safe-area-bottom flex flex-col">
       <slot />
     </main>
   </div>

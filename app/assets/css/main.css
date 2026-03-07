@@ -343,7 +343,7 @@ body {
 .layout-header {
   flex-shrink: 0;
   position: relative;
-  z-index: 10;
+  z-index: 20;
   padding: 12px 16px;
   padding-top: max(12px, env(safe-area-inset-top));
   padding-left: max(16px, env(safe-area-inset-left));
@@ -351,6 +351,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: rgba(15, 10, 30, 0.7);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(124, 58, 237, 0.12);
 }
 
 .layout-main {
