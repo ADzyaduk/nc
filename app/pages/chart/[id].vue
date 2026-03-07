@@ -98,15 +98,37 @@ function openPaywall() {
 
 async function handlePayment() {
   showPaywall.value = false
-  isUnlocking.value = true
+
   try {
-    await unlockFullReport(chartId.value)
-    try { telegram.hapticFeedback('success') } catch { }
+    const telegramId = telegram.telegramId.value || 'dev-user'
+    const { invoiceLink } = await $fetch<{ invoiceLink: string }>('/api/payments/invoice', {
+      method: 'POST',
+      body: { type: 'natal', reportId: chartId.value, telegramId },
+    })
+
+    await new Promise<void>((resolve, reject) => {
+      telegram.openInvoice(invoiceLink, async (status) => {
+        if (status !== 'paid') {
+          reject(new Error('Payment cancelled or failed'))
+          return
+        }
+        isUnlocking.value = true
+        try {
+          await unlockFullReport(chartId.value)
+          try { telegram.hapticFeedback('success') } catch { }
+          resolve()
+        }
+        catch (e) {
+          try { telegram.hapticFeedback('error') } catch { }
+          reject(e)
+        }
+        finally {
+          isUnlocking.value = false
+        }
+      })
+    })
   }
   catch {
-    try { telegram.hapticFeedback('error') } catch { }
-  }
-  finally {
     isUnlocking.value = false
   }
 }

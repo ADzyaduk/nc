@@ -39,26 +39,42 @@ async function handlePayment() {
   const telegramId = telegram.telegramId.value || 'dev-user'
 
   try {
-    await tarotStore.simulatePayment(telegramId)
+    const { invoiceLink } = await $fetch<{ invoiceLink: string }>('/api/payments/invoice', {
+      method: 'POST',
+      body: { type: 'tarot', telegramId },
+    })
 
-    await tarotStore.requestReading(
-      telegramId,
-      userQuestion.value.trim(),
-      locale.value,
-    )
+    await new Promise<void>((resolve, reject) => {
+      telegram.openInvoice(invoiceLink, async (status) => {
+        if (status !== 'paid') {
+          reject(new Error('Payment cancelled or failed'))
+          return
+        }
+        try {
+          await tarotStore.simulatePayment(telegramId)
 
-    await nextTick()
-    setTimeout(() => {
-      tarotStore.revealCards()
-    }, 600)
+          await tarotStore.requestReading(
+            telegramId,
+            userQuestion.value.trim(),
+            locale.value,
+          )
 
-    try { telegram.hapticFeedback('success') }
-    catch { /* ignore */ }
+          await nextTick()
+          setTimeout(() => {
+            tarotStore.revealCards()
+          }, 600)
+
+          try { telegram.hapticFeedback('success') } catch { }
+          resolve()
+        }
+        catch (e) {
+          try { telegram.hapticFeedback('error') } catch { }
+          reject(e)
+        }
+      })
+    })
   }
-  catch {
-    try { telegram.hapticFeedback('error') }
-    catch { /* ignore */ }
-  }
+  catch { /* payment cancelled or failed — stay on form */ }
 }
 
 function newReading() {

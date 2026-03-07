@@ -85,7 +85,7 @@
         "feature3": "Career recommendations",
         "feature4": "Yearly forecast",
         "feature5": "Karmic lessons",
-        "price": "299 ⭐",
+        "price": "50 ⭐",
         "cta": "Unlock Now",
         "cancel": "Not Now"
     },
@@ -141,7 +141,7 @@
             "feature2": "Communication and values breakdown",
             "feature3": "Harmonization recommendations",
             "feature4": "Growth areas and couple potential",
-            "price": "199 ⭐",
+            "price": "50 ⭐",
             "cta": "Unlock Now",
             "cancel": "Not Now"
         },
@@ -157,7 +157,7 @@
         "placeholder": "Describe your situation or ask a question...",
         "hint": "At least 3 characters",
         "cta": "Get Reading ✨",
-        "priceHint": "Reading costs 50 ⭐",
+        "priceHint": "Reading costs 25 ⭐",
         "loading": "Drawing cards...",
         "loadingSubtitle": "The cards are being drawn and AI is preparing the interpretation. This will take 10-15 seconds.",
         "paying": "Processing payment...",
@@ -173,7 +173,7 @@
             "feature3": "Personal AI interpretation",
             "feature4": "Cards linked to your question",
             "feature5": "Detailed spread analysis",
-            "price": "50 ⭐",
+            "price": "25 ⭐",
             "cta": "Get Reading",
             "cancel": "Not Now"
         }

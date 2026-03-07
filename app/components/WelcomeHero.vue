@@ -5,9 +5,9 @@ const { t } = useI18n()
 <template>
   <div class="text-center w-full max-w-full min-w-0 overflow-hidden px-1">
     <!-- Cosmic orb with animation -->
-    <div class="relative mx-auto mb-8 w-40 h-40 flex items-center justify-center">
+    <div class="relative mx-auto mb-2 w-24 h-24 flex items-center justify-center">
       <div class="cosmic-orb flex items-center justify-center">
-        <span class="text-4xl select-none" style="filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));">✨</span>
+        <span class="text-3xl select-none" style="filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.6));">✨</span>
       </div>
       <!-- Orbiting particles -->
       <div class="absolute inset-0 animate-spin" style="animation-duration: 20s;">
@@ -22,36 +22,36 @@ const { t } = useI18n()
     </div>
 
     <!-- Heading -->
-    <h1 class="text-3xl font-bold text-white glow-text mb-3 stagger-enter">
+    <h1 class="text-2xl font-bold text-white glow-text mb-1 stagger-enter">
       {{ t('welcome.heading') }}
     </h1>
-    <p class="text-violet-300/80 text-base leading-relaxed mb-8 max-w-xs mx-auto stagger-enter">
+    <p class="text-violet-300/80 text-sm leading-relaxed mb-3 max-w-xs mx-auto stagger-enter">
       {{ t('welcome.description') }}
     </p>
 
     <!-- Features: 4 иконки, чтобы помещались на узком экране -->
-    <div class="flex justify-center gap-3 sm:gap-4 mb-10">
+    <div class="flex justify-center gap-3 sm:gap-4 mb-3">
       <div class="text-center stagger-enter">
-        <div class="w-11 h-11 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
-          <span class="text-lg">🔭</span>
+        <div class="w-9 h-9 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-1 zodiac-pulse">
+          <span class="text-base">🔭</span>
         </div>
         <span class="text-xs text-violet-300">{{ t('welcome.features.chart') }}</span>
       </div>
       <div class="text-center stagger-enter">
-        <div class="w-11 h-11 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
-          <span class="text-lg">⚡</span>
+        <div class="w-9 h-9 rounded-xl bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mx-auto mb-1 zodiac-pulse">
+          <span class="text-base">⚡</span>
         </div>
         <span class="text-xs text-violet-300">{{ t('welcome.features.instant') }}</span>
       </div>
       <div class="text-center stagger-enter">
-        <div class="w-11 h-11 rounded-xl bg-pink-500/15 border border-pink-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
-          <UIcon name="i-heroicons-heart" class="size-5 text-pink-400" />
+        <div class="w-9 h-9 rounded-xl bg-pink-500/15 border border-pink-500/25 flex items-center justify-center mx-auto mb-1 zodiac-pulse">
+          <UIcon name="i-heroicons-heart" class="size-4 text-pink-400" />
         </div>
         <span class="text-xs text-pink-300">{{ t('welcome.features.compatibility') }}</span>
       </div>
       <div class="text-center stagger-enter">
-        <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center mx-auto mb-1.5 zodiac-pulse">
-          <span class="text-lg">🔮</span>
+        <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center mx-auto mb-1 zodiac-pulse">
+          <span class="text-base">🔮</span>
         </div>
         <span class="text-xs text-amber-300">{{ t('welcome.features.tarot') }}</span>
       </div>

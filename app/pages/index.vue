@@ -7,7 +7,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center min-h-[min(80vh,80dvh)] py-6">
+  <div class="flex flex-col items-center justify-center h-full py-2 overflow-hidden">
     <WelcomeHero />
   </div>
 </template>

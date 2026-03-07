@@ -114,39 +114,54 @@ function openPaywall() {
 
 async function handlePayment() {
   showPaywall.value = false
-  isUnlocking.value = true
 
   try {
-    const data = await $fetch<{ report: any }>('/api/compatibility/unlock', {
+    const telegramId = telegram.telegramId.value || 'dev-user'
+    const { invoiceLink } = await $fetch<{ invoiceLink: string }>('/api/payments/invoice', {
       method: 'POST',
-      body: {
-        reportId: reportId.value,
-      },
+      body: { type: 'compatibility', reportId: reportId.value, telegramId },
     })
 
-    if (data.report) {
-      compatibilityStore.currentReport = data.report
-    }
+    await new Promise<void>((resolve, reject) => {
+      telegram.openInvoice(invoiceLink, async (status) => {
+        if (status !== 'paid') {
+          reject(new Error('Payment cancelled or failed'))
+          return
+        }
+        isUnlocking.value = true
+        try {
+          const data = await $fetch<{ report: any }>('/api/compatibility/unlock', {
+            method: 'POST',
+            body: { reportId: reportId.value },
+          })
 
-    // Гарантируем, что на этом клиенте отчёт считается разблокированным,
-    // даже если бэкенд не смог корректно сохранить is_paid.
-    isLocallyUnlocked.value = true
-    if (compatibilityStore.currentReport) {
-      compatibilityStore.currentReport.is_paid = true
-    }
+          if (data.report) {
+            compatibilityStore.currentReport = data.report
+          }
 
-    try { telegram.hapticFeedback('success') } catch { }
+          isLocallyUnlocked.value = true
+          if (compatibilityStore.currentReport) {
+            compatibilityStore.currentReport.is_paid = true
+          }
+
+          try { telegram.hapticFeedback('success') } catch { }
+          resolve()
+        }
+        catch {
+          isLocallyUnlocked.value = true
+          if (compatibilityStore.currentReport) {
+            compatibilityStore.currentReport.is_paid = true
+          }
+          try { telegram.hapticFeedback('error') } catch { }
+          resolve()
+        }
+        finally {
+          isUnlocking.value = false
+        }
+      })
+    })
   }
   catch {
-    // Даже если запрос упал, разблокируем локально, чтобы пользователь увидел полный текст.
-    isLocallyUnlocked.value = true
-    if (compatibilityStore.currentReport) {
-      compatibilityStore.currentReport.is_paid = true
-    }
-
-    try { telegram.hapticFeedback('error') } catch { }
-  }
-  finally {
     isUnlocking.value = false
   }
 }

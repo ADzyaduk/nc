@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
         .from('payments')
         .insert({
             user_id: user.id,
-            amount: 299,
+            amount: 50,
             currency: 'XTR',
             status: 'completed',
             telegram_payment_id: `sim_${Date.now()}`,

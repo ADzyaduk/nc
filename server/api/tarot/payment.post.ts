@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
         .from('payments')
         .insert({
             user_id: user.id,
-            amount: 50,
+            amount: 25,
             currency: 'XTR',
             status: 'completed',
             telegram_payment_id: `sim_tarot_${Date.now()}`,
