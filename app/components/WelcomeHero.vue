@@ -3,7 +3,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="text-center w-full max-w-full min-w-0 overflow-hidden px-1">
+  <div class="text-center w-full max-w-full min-w-0 px-1">
     <!-- Cosmic orb with animation -->
     <div class="relative mx-auto mb-4 w-40 h-40 flex items-center justify-center">
       <div class="cosmic-orb flex items-center justify-center">
