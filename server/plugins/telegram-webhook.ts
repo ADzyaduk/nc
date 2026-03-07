@@ -1,18 +1,20 @@
 /**
  * Nitro server plugin — registers the Telegram bot webhook on startup.
  *
- * Requires PUBLIC_URL in .env (e.g. https://your-app.example.com).
- * If PUBLIC_URL is not set the plugin silently skips registration,
- * which is fine for local development where you can use ngrok manually.
+ * Set the following environment variables in production (e.g. Amvera config):
+ *   NUXT_TELEGRAM_BOT_TOKEN=<your token>
+ *   NUXT_PUBLIC_URL=https://your-deployed-app.com
+ *
+ * Nuxt automatically maps NUXT_<KEY> env vars to runtimeConfig at runtime,
+ * so no .env file is needed on the server.
  */
 export default defineNitroPlugin(async () => {
-    const botToken = process.env.TELEGRAM_BOT_TOKEN
-    const publicUrl = process.env.PUBLIC_URL?.replace(/\/$/, '')
+    const config = useRuntimeConfig()
+    const botToken = config.telegramBotToken as string | undefined
+    const publicUrl = (config.publicUrl as string | undefined)?.replace(/\/$/, '')
 
     if (!botToken || !publicUrl) {
-        if (!publicUrl) {
-            console.info('[Telegram] PUBLIC_URL not set — skipping webhook registration.')
-        }
+        console.info('[Telegram] Webhook registration skipped — set NUXT_TELEGRAM_BOT_TOKEN and NUXT_PUBLIC_URL.')
         return
     }
 

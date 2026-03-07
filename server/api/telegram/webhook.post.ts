@@ -14,7 +14,7 @@
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
-    const botToken = process.env.TELEGRAM_BOT_TOKEN
+    const { telegramBotToken: botToken } = useRuntimeConfig(event)
 
     if (!botToken) {
         return { ok: true }

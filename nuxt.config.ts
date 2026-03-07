@@ -46,6 +46,8 @@ export default defineNuxtConfig({
       process.env.NUXT_TELEGRAM_BOT_TOKEN ||
       process.env.TELEGRAM_BOT_TOKEN ||
       '',
+    // Public URL for webhook registration — override at runtime via NUXT_PUBLIC_URL
+    publicUrl: '',
     openrouterApiKey:
       process.env.NUXT_OPENROUTER_API_KEY ||
       process.env.OPENROUTER_API_KEY ||

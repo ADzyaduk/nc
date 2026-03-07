@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
         throw createError({ statusCode: 400, statusMessage: 'Invalid product type' })
     }
 
-    const botToken = process.env.TELEGRAM_BOT_TOKEN
+    const { telegramBotToken: botToken } = useRuntimeConfig(event)
     if (!botToken) {
         throw createError({ statusCode: 500, statusMessage: 'Bot token not configured' })
     }
