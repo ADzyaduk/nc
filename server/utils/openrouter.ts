@@ -338,28 +338,29 @@ export async function generateCompatibilityInterpretation(
 
 function buildTarotSystemPrompt(locale: string): string {
     const lang = locale === 'ru' ? 'Russian' : 'English'
-    return `You are a mystical tarot reader with deep knowledge of the Major Arcana and decades of experience interpreting the cards.
+    return `You are an experienced tarot reader who explains cards in plain, human language — like a supportive friend who knows tarot well.
 Respond ONLY in ${lang}.
-Write in a mystical, wise, and compassionate tone — like an experienced oracle sharing sacred wisdom.
 
-IMPORTANT INTERPRETATION RULES:
-- You will receive the FULL MEANING of each card. Use this meaning as the foundation for your interpretation.
-- Adapt the card's meaning to the querent's SPECIFIC QUESTION — do not give a generic reading.
-- Each card's meaning shifts depending on its POSITION in the spread (Situation, Challenge, or Advice).
-- Connect the three cards into a COHERENT NARRATIVE — they tell a story together, not three separate stories.
-- Be concrete and actionable, especially in the Advice section.
+STYLE (very important):
+- Write simply and clearly. Short sentences. No vague or flowery phrases.
+- Avoid mystical filler: no "космические силы", "энергии вселенной", "судьба ведёт", "голос карт" and similar. Be direct.
+- Tie every sentence to the specific card meaning and the person's question. No generic wisdom.
+- In the Advice section give 1–3 concrete, doable steps — what to do or how to think this week.
+- Connect the three cards into one clear story: situation → what gets in the way → what to do.
 
-The spread uses three positions:
-1. Situation — the current state of affairs, what energies surround the querent now
-2. Challenge — the main obstacle, difficulty, or what blocks progress
-3. Advice — guidance, recommended action, and wisdom for moving forward
+Spread positions:
+1. Situation — what's going on right now (based on the first card and the question).
+2. Challenge — what blocks or complicates things (second card).
+3. Advice — practical guidance (third card).
 
-FORMATTING RULES (STRICT — follow exactly):
-- Use **bold text** for section titles, followed immediately by the content on the SAME line or a blank line before a new paragraph.
-- FORBIDDEN: Never put a section title alone on one line and then start the next line with ": text".
-- Do NOT use markdown headers (##, ###). Use **bold** for section names only.
-- Double newline only between main sections/paragraphs.
-- Write approximately 500-700 words total.`
+INTERPRETATION RULES:
+- Use the FULL MEANING of each card as the basis. Adapt it to the querent's SPECIFIC QUESTION.
+- Position changes the angle: same card means different things as Situation vs Advice.
+
+FORMATTING (strict):
+- Use **bold** for section titles. Put the title and first sentence on the same line or leave a blank line before the next paragraph.
+- Do NOT use ## or ###. Only **bold** for section names.
+- One blank line between main sections. About 400–600 words total.`
 }
 
 function buildTarotReadingPrompt(question: string, cards: TarotCard[], locale: string): string {
@@ -386,13 +387,13 @@ TAROT SPREAD (Situation — Challenge — Advice):
 
 ${cardDescriptions}
 
-Generate a tarot reading interpretation in ${lang}. Structure:
-1. **${positions[0]}** — interpret the first card's meaning in relation to the querent's question. How does this card describe their current situation? What energies are at play right now?
-2. **${positions[1]}** — interpret the second card as the obstacle. What aspect of this card's meaning reveals what is blocking the querent? What inner or outer challenge must they face?
-3. **${positions[2]}** — interpret the third card as guidance. Based on this card's wisdom, what specific actions or mindset shifts should the querent adopt?
-4. **${isRu ? 'Итог' : 'Summary'}** — weave all three cards together into one cohesive message. How do they tell a unified story from situation through challenge to advice?
+Generate a tarot reading in ${lang}. Structure:
+1. **${positions[0]}** — in simple words, what is the person's situation right now according to this card and their question? Be concrete.
+2. **${positions[1]}** — what exactly is blocking or complicating things (from this card's meaning)? Name the obstacle clearly.
+3. **${positions[2]}** — 1–3 specific, doable steps or a clear mindset change. What to do or try this week?
+4. **${isRu ? 'Итог' : 'Summary'}** — in 2–4 sentences, tie the three cards into one message: where they are, what gets in the way, what to do.
 
-CRITICAL: Base your interpretation on the card meanings provided above. Adapt them specifically to the querent's question — do not give a generic reading.`
+Use only the card meanings given above. Answer the person's question directly. Write in plain language, short sentences. No vague or mystical filler.`
 }
 
 export async function generateTarotInterpretation(
