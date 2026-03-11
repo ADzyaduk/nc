@@ -5,6 +5,7 @@ const router = useRouter()
 const telegram = useTelegram()
 const chartStore = useChartStore()
 const reportStore = useReportStore()
+const userStore = useUserStore()
 const { unlockFullReport, generateBasicReport } = useNatalChart()
 
 const isDev = import.meta.dev
@@ -98,9 +99,28 @@ function openPaywall() {
 
 async function handlePayment() {
   showPaywall.value = false
+  const telegramId = telegram.telegramId.value || 'dev-user'
+
+  if (userStore.user && userStore.user.free_uses_remaining > 0) {
+    isUnlocking.value = true
+    try {
+      await $fetch('/api/payments/use-free-credit', {
+        method: 'POST',
+        body: { telegramId },
+      })
+      userStore.user.free_uses_remaining--
+      await unlockFullReport(chartId.value)
+    }
+    catch {
+      try { telegram.hapticFeedback('error') } catch { }
+    }
+    finally {
+      isUnlocking.value = false
+    }
+    return
+  }
 
   try {
-    const telegramId = telegram.telegramId.value || 'dev-user'
     const { invoiceLink } = await $fetch<{ invoiceLink: string }>('/api/payments/invoice', {
       method: 'POST',
       body: { type: 'natal', reportId: chartId.value, telegramId },
@@ -212,6 +232,7 @@ async function handlePayment() {
     <PaywallModal
       v-model:open="showPaywall"
       :is-paying="isUnlocking"
+      :free-credits="userStore.user?.free_uses_remaining ?? 0"
       @pay="handlePayment"
     />
   </div>

@@ -54,6 +54,7 @@ interface TelegramWebApp {
     showConfirm: (message: string, callback: (confirmed: boolean) => void) => void
     showAlert: (message: string, callback?: () => void) => void
     openInvoice: (url: string, callback: (status: string) => void) => void
+    openLink: (url: string) => void
 }
 
 declare global {
@@ -173,6 +174,15 @@ export function useTelegram() {
         })
     }
 
+    function openLink(url: string) {
+        if (webApp.value?.openLink) {
+            webApp.value.openLink(url)
+        }
+        else {
+            window.open(url, '_blank')
+        }
+    }
+
     // Opens a Telegram Stars invoice. Falls back to immediate 'paid' in dev/non-Telegram env.
     function openInvoice(url: string, callback: (status: string) => void) {
         if (webApp.value?.openInvoice) {
@@ -205,5 +215,6 @@ export function useTelegram() {
         showConfirm,
         showAlert,
         openInvoice,
+        openLink,
     }
 }

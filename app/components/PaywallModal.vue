@@ -6,8 +6,10 @@ const open = defineModel<boolean>('open', { default: false })
 const props = withDefaults(defineProps<{
   isPaying: boolean
   i18nPrefix?: string
+  freeCredits?: number
 }>(), {
   i18nPrefix: 'paywall',
+  freeCredits: 0,
 })
 
 const emit = defineEmits<{
@@ -15,6 +17,8 @@ const emit = defineEmits<{
 }>()
 
 const p = computed(() => props.i18nPrefix)
+
+const isFree = computed(() => props.freeCredits > 0)
 
 const features = computed(() => [
   t(`${p.value}.feature1`),
@@ -39,8 +43,17 @@ const features = computed(() => [
     <template #content>
       <div class="p-6 text-center">
         <!-- Icon -->
-        <div class="w-16 h-16 rounded-full bg-linear-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30 flex items-center justify-center mx-auto mb-4">
-          <UIcon name="i-heroicons-star" class="size-8 text-amber-400" />
+        <div
+          class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+          :class="isFree
+            ? 'bg-linear-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-500/30'
+            : 'bg-linear-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30'"
+        >
+          <UIcon
+            :name="isFree ? 'i-heroicons-gift' : 'i-heroicons-star'"
+            class="size-8"
+            :class="isFree ? 'text-emerald-400' : 'text-amber-400'"
+          />
         </div>
 
         <!-- Title -->
@@ -65,22 +78,31 @@ const features = computed(() => [
           </div>
         </div>
 
-        <!-- Price -->
+        <!-- Price / Free badge -->
         <div class="mb-6">
-          <span class="text-3xl font-bold text-white glow-gold">{{ t(`${p}.price`) }}</span>
+          <template v-if="isFree">
+            <div class="inline-flex flex-col items-center gap-1">
+              <span class="text-3xl font-bold text-emerald-400">{{ t('freeCredits.free') }}</span>
+              <span class="text-xs text-emerald-400/70">{{ t('freeCredits.remaining', { n: freeCredits }) }}</span>
+            </div>
+          </template>
+          <template v-else>
+            <span class="text-3xl font-bold text-white glow-gold">{{ t(`${p}.price`) }}</span>
+          </template>
         </div>
 
         <!-- Buttons -->
         <div class="space-y-3">
           <UButton
             size="xl"
-            color="primary"
+            :color="isFree ? 'success' : 'primary'"
             variant="solid"
             block
             :loading="isPaying"
-            :label="t(`${p}.cta`)"
-            icon="i-heroicons-lock-open"
-            class="cursor-pointer shadow-lg shadow-violet-600/30"
+            :label="isFree ? t('freeCredits.cta') : t(`${p}.cta`)"
+            :icon="isFree ? 'i-heroicons-gift' : 'i-heroicons-lock-open'"
+            class="cursor-pointer shadow-lg"
+            :class="isFree ? 'shadow-emerald-600/30' : 'shadow-violet-600/30'"
             @click="emit('pay')"
           />
           <UButton

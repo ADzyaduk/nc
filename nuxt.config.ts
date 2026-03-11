@@ -66,6 +66,7 @@ export default defineNuxtConfig({
         url: '',
         key: '',
       },
+      telegramBotUsername: process.env.NUXT_PUBLIC_TELEGRAM_BOT_USERNAME || '',
     },
   },
 

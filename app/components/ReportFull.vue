@@ -2,6 +2,7 @@
 const { t } = useI18n()
 const { translateSign, translatePlanet, getPlanetEmoji, getSignIcon, getElementBgColor, getElementColor } = useZodiac()
 const { renderMarkdown } = useReportRenderer()
+const { shareNatalChart } = useShare()
 
 const props = defineProps<{
   report: {
@@ -40,9 +41,20 @@ const otherPlanets = computed(() =>
           <span class="text-2xl">⭐</span>
         </div>
         <h2 class="text-lg font-bold text-white">{{ t('report.fullTitle') }}</h2>
-        <UBadge color="primary" variant="subtle" size="sm" class="mt-2">
-          {{ t('report.premium') }}
-        </UBadge>
+        <div class="flex items-center justify-center gap-2 mt-2">
+          <UBadge color="primary" variant="subtle" size="sm">
+            {{ t('report.premium') }}
+          </UBadge>
+          <UButton
+            size="xs"
+            color="neutral"
+            variant="ghost"
+            icon="i-heroicons-share"
+            :label="t('share.button')"
+            class="cursor-pointer text-violet-400 hover:text-violet-200"
+            @click="shareNatalChart(chart.chart_json)"
+          />
+        </div>
       </div>
 
       <!-- Big Three grid -->

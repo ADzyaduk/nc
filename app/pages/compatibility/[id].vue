@@ -4,6 +4,7 @@ const route = useRoute()
 const router = useRouter()
 const telegram = useTelegram()
 const compatibilityStore = useCompatibilityStore()
+const userStore = useUserStore()
 const { triggerInterpret, currentStep } = useCompatibility()
 
 const reportId = computed(() => route.params.id as string)
@@ -114,9 +115,36 @@ function openPaywall() {
 
 async function handlePayment() {
   showPaywall.value = false
+  const telegramId = telegram.telegramId.value || 'dev-user'
+
+  if (userStore.user && userStore.user.free_uses_remaining > 0) {
+    isUnlocking.value = true
+    try {
+      await $fetch('/api/payments/use-free-credit', {
+        method: 'POST',
+        body: { telegramId },
+      })
+      userStore.user.free_uses_remaining--
+
+      const data = await $fetch<{ report: any }>('/api/compatibility/unlock', {
+        method: 'POST',
+        body: { reportId: reportId.value },
+      })
+      if (data.report) compatibilityStore.currentReport = data.report
+      isLocallyUnlocked.value = true
+      if (compatibilityStore.currentReport) compatibilityStore.currentReport.is_paid = true
+      try { telegram.hapticFeedback('success') } catch { }
+    }
+    catch {
+      try { telegram.hapticFeedback('error') } catch { }
+    }
+    finally {
+      isUnlocking.value = false
+    }
+    return
+  }
 
   try {
-    const telegramId = telegram.telegramId.value || 'dev-user'
     const { invoiceLink } = await $fetch<{ invoiceLink: string }>('/api/payments/invoice', {
       method: 'POST',
       body: { type: 'compatibility', reportId: reportId.value, telegramId },
@@ -220,6 +248,7 @@ async function handlePayment() {
     <PaywallModal
       v-model:open="showPaywall"
       :is-paying="isUnlocking"
+      :free-credits="userStore.user?.free_uses_remaining ?? 0"
       @pay="handlePayment"
     />
   </div>

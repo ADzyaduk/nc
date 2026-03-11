@@ -189,5 +189,17 @@
         "emptyCharts": "You don't have any natal charts yet",
         "emptyCompatibility": "You don't have any compatibility reports yet",
         "myCharts": "My Charts"
+    },
+    "freeCredits": {
+        "badge": "🎁 {n} free services remaining",
+        "free": "FREE",
+        "remaining": "{n} free uses left",
+        "cta": "Use Free Credit"
+    },
+    "share": {
+        "button": "Share",
+        "natal": "✨ My Natal Chart\n\n☀️ Sun: {sun} | 🌙 Moon: {moon} | ⬆️ Rising: {asc}\n\nDiscover your cosmic blueprint!",
+        "compatibility": "💫 Our Compatibility: {score}%\n\nEmotional · Passion · Communication · Values\n\nCheck your compatibility!",
+        "tarot": "🔮 My Tarot Reading\n\n🃏 Cards: {cards}\n\nAsk the cards your question!"
     }
 }

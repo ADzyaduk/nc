@@ -88,6 +88,7 @@ onMounted(() => {
 
 const person1Label = computed(() => props.report.person1_name || t('compatibility.form.person1'))
 const person2Label = computed(() => props.report.person2_name || t('compatibility.form.person2'))
+const { shareCompatibility } = useShare()
 </script>
 
 <template>
@@ -141,6 +142,19 @@ const person2Label = computed(() => props.report.person2_name || t('compatibilit
           <span class="text-pink-300">{{ person1Label }}</span>
           <UIcon name="i-heroicons-heart" class="size-4 text-pink-500" />
           <span class="text-violet-300">{{ person2Label }}</span>
+        </div>
+
+        <!-- Share button -->
+        <div class="mt-3">
+          <UButton
+            size="xs"
+            color="neutral"
+            variant="ghost"
+            icon="i-heroicons-share"
+            :label="t('share.button')"
+            class="cursor-pointer text-violet-400 hover:text-violet-200"
+            @click="shareCompatibility(report)"
+          />
         </div>
       </div>
     </UCard>

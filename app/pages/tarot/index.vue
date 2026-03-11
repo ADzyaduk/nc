@@ -3,7 +3,9 @@ const { t, locale } = useI18n()
 const router = useRouter()
 const telegram = useTelegram()
 const tarotStore = useTarotStore()
+const userStore = useUserStore()
 const { renderMarkdown } = useReportRenderer()
+const { shareTarot } = useShare()
 
 const showPaywall = ref(false)
 const userQuestion = ref('')
@@ -37,6 +39,24 @@ function onSubmit() {
 async function handlePayment() {
   showPaywall.value = false
   const telegramId = telegram.telegramId.value || 'dev-user'
+
+  if (userStore.user && userStore.user.free_uses_remaining > 0) {
+    try {
+      await $fetch('/api/payments/use-free-credit', {
+        method: 'POST',
+        body: { telegramId },
+      })
+      userStore.user.free_uses_remaining--
+
+      await tarotStore.simulatePayment(telegramId)
+      await tarotStore.requestReading(telegramId, userQuestion.value.trim(), locale.value)
+      await nextTick()
+      setTimeout(() => { tarotStore.revealCards() }, 600)
+      try { telegram.hapticFeedback('success') } catch { }
+    }
+    catch { /* stay on form */ }
+    return
+  }
 
   try {
     const { invoiceLink } = await $fetch<{ invoiceLink: string }>('/api/payments/invoice', {
@@ -150,8 +170,18 @@ const interpretationHtml = computed(() => renderMarkdown(tarotStore.interpretati
         </UCard>
       </Transition>
 
-      <!-- New reading button -->
-      <div v-if="tarotStore.isRevealed" class="mt-4 mb-6">
+      <!-- New reading + Share buttons -->
+      <div v-if="tarotStore.isRevealed" class="mt-4 mb-6 space-y-2">
+        <UButton
+          size="xs"
+          color="neutral"
+          variant="ghost"
+          block
+          icon="i-heroicons-share"
+          :label="t('share.button')"
+          class="cursor-pointer text-violet-400 hover:text-violet-200"
+          @click="shareTarot(tarotStore.cards, tarotStore.question)"
+        />
         <UButton
           size="lg"
           color="primary"
@@ -251,6 +281,7 @@ const interpretationHtml = computed(() => renderMarkdown(tarotStore.interpretati
       v-model:open="showPaywall"
       :is-paying="tarotStore.isPaying"
       i18n-prefix="tarot.paywall"
+      :free-credits="userStore.user?.free_uses_remaining ?? 0"
       @pay="handlePayment"
     />
   </div>

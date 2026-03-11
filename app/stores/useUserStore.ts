@@ -6,6 +6,7 @@ interface User {
     username: string
     created_at: string
     subscription_status: string
+    free_uses_remaining: number
 }
 
 export const useUserStore = defineStore('user', () => {

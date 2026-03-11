@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
+const userStore = useUserStore()
+const freeCredits = computed(() => userStore.user?.free_uses_remaining ?? 0)
 </script>
 
 <template>
@@ -25,9 +27,16 @@ const { t } = useI18n()
     <h1 class="text-2xl font-bold text-white glow-text mb-1 stagger-enter">
       {{ t('welcome.heading') }}
     </h1>
-    <p class="text-violet-300/80 text-sm leading-relaxed mb-3 max-w-xs mx-auto stagger-enter">
+    <p class="text-violet-300/80 text-sm leading-relaxed mb-2 max-w-xs mx-auto stagger-enter">
       {{ t('welcome.description') }}
     </p>
+
+    <!-- Free credits badge -->
+    <div v-if="freeCredits > 0" class="mb-3">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs text-emerald-400">
+        {{ t('freeCredits.badge', { n: freeCredits }) }}
+      </span>
+    </div>
 
     <!-- Features: 4 иконки, чтобы помещались на узком экране -->
     <div class="flex justify-center gap-3 sm:gap-4 mb-3">
