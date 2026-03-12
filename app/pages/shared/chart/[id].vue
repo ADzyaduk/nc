@@ -33,7 +33,7 @@ onUnmounted(() => {
 })
 
 const chartJson = computed(() => chart.value?.chart_json)
-const ownerName = computed(() => chart.value?.birth_name || null)
+const ownerName = computed(() => chart.value?.birth_city || null)
 </script>
 
 <template>

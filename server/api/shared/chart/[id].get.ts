@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
     const { data: chart } = await supabase
         .from('birth_charts')
-        .select('id, birth_name, birth_date, chart_json')
+        .select('id, birth_city, birth_date, chart_json')
         .eq('id', chartId)
         .single()
 
