@@ -34,24 +34,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
             }
         }
 
-        // Handle shared deeplinks: startapp=chart_<id> or startapp=compat_<id>
-        // Parse from raw initData string (more reliable than initDataUnsafe)
-        const rawInitData = telegram.initData.value
-        const initParams = rawInitData ? new URLSearchParams(rawInitData) : null
-        const startParam = (initParams?.get('start_param')
-            ?? telegram.webApp.value?.initDataUnsafe?.start_param) as string | undefined
-
-        if (startParam?.startsWith('chart_')) {
-            const compactId = startParam.slice('chart_'.length)
-            // Restore UUID hyphens: 8-4-4-4-12
-            const id = `${compactId.slice(0, 8)}-${compactId.slice(8, 12)}-${compactId.slice(12, 16)}-${compactId.slice(16, 20)}-${compactId.slice(20)}`
-            return navigateTo(`/shared/chart/${id}`)
-        }
-        else if (startParam?.startsWith('compat_')) {
-            const compactId = startParam.slice('compat_'.length)
-            const id = `${compactId.slice(0, 8)}-${compactId.slice(8, 12)}-${compactId.slice(12, 16)}-${compactId.slice(16, 20)}-${compactId.slice(20)}`
-            return navigateTo(`/shared/compatibility/${id}`)
-        }
     }
     else {
         // ---- Dev mode (outside Telegram) ----
