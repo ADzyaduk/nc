@@ -1,5 +1,5 @@
 export function useShare() {
-    const { openLink } = useTelegram()
+    const { openTelegramLink } = useTelegram()
     const config = useRuntimeConfig()
     const { t } = useI18n()
 
@@ -9,7 +9,7 @@ export function useShare() {
             ? `https://t.me/${botUsername}?startapp=share`
             : 'https://t.me'
         const url = `https://t.me/share/url?url=${encodeURIComponent(deeplink)}&text=${encodeURIComponent(text)}`
-        openLink(url)
+        openTelegramLink(url)
     }
 
     function shareNatalChart(chartJson: {
