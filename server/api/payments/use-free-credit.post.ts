@@ -18,9 +18,9 @@ export default defineEventHandler(async (event) => {
         throw createError({ statusCode: 401, statusMessage: 'User not found' })
     }
 
-    const { data: remaining } = await supabase.rpc('consume_free_use', { p_user_id: user.id })
+    const { data: remaining, error: rpcError } = await supabase.rpc('consume_free_use', { p_user_id: user.id })
 
-    if (remaining === -1) {
+    if (rpcError || remaining === null || remaining === -1) {
         throw createError({ statusCode: 402, statusMessage: 'No free uses remaining' })
     }
 
