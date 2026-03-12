@@ -15,6 +15,7 @@ interface TelegramWebApp {
         }
         auth_date: number
         hash: string
+        start_param?: string
     }
     version: string
     themeParams: Record<string, string>

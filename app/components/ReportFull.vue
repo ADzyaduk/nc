@@ -12,6 +12,7 @@ const props = defineProps<{
     is_paid: boolean
   }
   chart: {
+    id: string
     chart_json: {
       sun: { sign: string; degree: number; house: number }
       moon: { sign: string; degree: number; house: number }
@@ -52,7 +53,7 @@ const otherPlanets = computed(() =>
             icon="i-heroicons-share"
             :label="t('share.button')"
             class="cursor-pointer text-violet-400 hover:text-violet-200"
-            @click="shareNatalChart(chart.chart_json)"
+            @click="shareNatalChart(chart.chart_json, chart.id)"
           />
         </div>
       </div>

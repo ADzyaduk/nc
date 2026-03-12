@@ -7,6 +7,7 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
     const telegram = useTelegram()
     const userStore = useUserStore()
+    const router = useRouter()
 
     if (telegram.isAvailable.value) {
         // ---- Inside Telegram ----
@@ -31,6 +32,17 @@ export default defineNuxtPlugin(async (nuxtApp) => {
             catch {
                 console.warn('Telegram auth failed — running in demo mode')
             }
+        }
+
+        // Handle shared deeplinks: startapp=chart-<id> or startapp=compat-<id>
+        const startParam = telegram.webApp.value?.initDataUnsafe?.start_param as string | undefined
+        if (startParam?.startsWith('chart-')) {
+            const chartId = startParam.slice('chart-'.length)
+            router.push(`/shared/chart/${chartId}`)
+        }
+        else if (startParam?.startsWith('compat-')) {
+            const reportId = startParam.slice('compat-'.length)
+            router.push(`/shared/compatibility/${reportId}`)
         }
     }
     else {
