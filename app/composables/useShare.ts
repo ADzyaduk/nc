@@ -1,7 +1,7 @@
 export function useShare() {
-    const { openTelegramLink } = useTelegram()
+    const { openLink } = useTelegram()
     const config = useRuntimeConfig()
-    const { t } = useI18n()
+    const { translateSign } = useZodiac()
 
     function share(text: string) {
         const botUsername = config.public.telegramBotUsername as string
@@ -9,7 +9,7 @@ export function useShare() {
             ? `https://t.me/${botUsername}?startapp=share`
             : 'https://t.me'
         const url = `https://t.me/share/url?url=${encodeURIComponent(deeplink)}&text=${encodeURIComponent(text)}`
-        openTelegramLink(url)
+        openLink(url)
     }
 
     function shareNatalChart(chartJson: {
@@ -17,11 +17,10 @@ export function useShare() {
         moon: { sign: string }
         ascendant: { sign: string }
     }) {
-        const text = t('share.natal', {
-            sun: chartJson.sun.sign,
-            moon: chartJson.moon.sign,
-            asc: chartJson.ascendant.sign,
-        })
+        const sun = translateSign(chartJson.sun.sign)
+        const moon = translateSign(chartJson.moon.sign)
+        const asc = translateSign(chartJson.ascendant.sign)
+        const text = `✨ Мой натальный чарт\n\n☀️ Солнце: ${sun} | 🌙 Луна: ${moon} | ⬆️ Асцендент: ${asc}\n\nУзнай свой космический код!`
         share(text)
     }
 
@@ -30,13 +29,16 @@ export function useShare() {
         person1_name?: string | null
         person2_name?: string | null
     }) {
-        const text = t('share.compatibility', { score: report.scores.overall })
+        const names = [report.person1_name, report.person2_name].filter(Boolean).join(' & ')
+        const text = names
+            ? `💫 ${names} — совместимость ${report.scores.overall}%\n\nЭмоции · Страсть · Общение · Ценности\n\nПроверь свою совместимость!`
+            : `💫 Наша совместимость: ${report.scores.overall}%\n\nЭмоции · Страсть · Общение · Ценности\n\nПроверь свою совместимость!`
         share(text)
     }
 
     function shareTarot(cards: Array<{ name: string }>, _question: string) {
         const cardNames = cards.map(c => c.name).join(' | ')
-        const text = t('share.tarot', { cards: cardNames })
+        const text = `🔮 Мой расклад Таро\n\n🃏 ${cardNames}\n\nУзнай свой ответ у карт!`
         share(text)
     }
 
