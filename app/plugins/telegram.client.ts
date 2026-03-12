@@ -38,22 +38,19 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         // Parse from raw initData string (more reliable than initDataUnsafe)
         const rawInitData = telegram.initData.value
         const initParams = rawInitData ? new URLSearchParams(rawInitData) : null
-        const startParam = initParams?.get('start_param')
-            ?? telegram.webApp.value?.initDataUnsafe?.start_param as string | undefined
-        // DEBUG: временно показываем start_param — убери после отладки
-        if (startParam) {
-            telegram.webApp.value?.showAlert?.(`start_param: ${startParam}`)
-        }
+        const startParam = (initParams?.get('start_param')
+            ?? telegram.webApp.value?.initDataUnsafe?.start_param) as string | undefined
+
         if (startParam?.startsWith('chart_')) {
             const compactId = startParam.slice('chart_'.length)
             // Restore UUID hyphens: 8-4-4-4-12
             const id = `${compactId.slice(0, 8)}-${compactId.slice(8, 12)}-${compactId.slice(12, 16)}-${compactId.slice(16, 20)}-${compactId.slice(20)}`
-            router.push(`/shared/chart/${id}`)
+            return navigateTo(`/shared/chart/${id}`)
         }
         else if (startParam?.startsWith('compat_')) {
             const compactId = startParam.slice('compat_'.length)
             const id = `${compactId.slice(0, 8)}-${compactId.slice(8, 12)}-${compactId.slice(12, 16)}-${compactId.slice(16, 20)}-${compactId.slice(20)}`
-            router.push(`/shared/compatibility/${id}`)
+            return navigateTo(`/shared/compatibility/${id}`)
         }
     }
     else {
