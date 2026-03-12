@@ -3,13 +3,15 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const telegram = useTelegram()
-const { translateSign, getSignIcon, getElementBgColor, getElementColor } = useZodiac()
+const { translateSign, translatePlanet, getPlanetEmoji, getSignIcon, getElementBgColor, getElementColor } = useZodiac()
+const { renderMarkdown } = useReportRenderer()
 
 const chartId = computed(() => route.params.id as string)
 
 definePageMeta({ layout: 'default' })
 
 const chart = ref<any>(null)
+const fullReport = ref<any>(null)
 const isLoading = ref(true)
 const fetchError = ref<string | null>(null)
 
@@ -17,8 +19,9 @@ onMounted(async () => {
   telegram.showBackButton(() => router.push('/'))
 
   try {
-    const data = await $fetch<{ chart: any }>(`/api/shared/chart/${chartId.value}`)
+    const data = await $fetch<{ chart: any, fullReport: any }>(`/api/shared/chart/${chartId.value}`)
     chart.value = data.chart
+    fullReport.value = data.fullReport
   }
   catch {
     fetchError.value = 'Карта не найдена'
@@ -33,7 +36,13 @@ onUnmounted(() => {
 })
 
 const chartJson = computed(() => chart.value?.chart_json)
-const ownerName = computed(() => chart.value?.birth_city || null)
+const ownerCity = computed(() => chart.value?.birth_city || null)
+const otherPlanets = computed(() =>
+  chartJson.value?.planets?.filter((p: any) => p.name !== 'Sun' && p.name !== 'Moon') || [],
+)
+const renderedReport = computed(() =>
+  fullReport.value?.content ? renderMarkdown(fullReport.value.content) : null,
+)
 </script>
 
 <template>
@@ -44,11 +53,9 @@ const ownerName = computed(() => chart.value?.birth_city || null)
         <span class="text-3xl">🌌</span>
       </div>
       <h1 class="text-lg font-bold text-white">
-        {{ ownerName ? `Натальная карта ${ownerName}` : 'Натальная карта' }}
+        {{ ownerCity ? `Натальная карта · ${ownerCity}` : 'Натальная карта' }}
       </h1>
-      <p class="text-sm text-violet-300 mt-1">
-        Космический код этого человека
-      </p>
+      <p class="text-sm text-violet-300 mt-1">Космический код этого человека</p>
     </div>
 
     <!-- Loading -->
@@ -67,86 +74,68 @@ const ownerName = computed(() => chart.value?.birth_city || null)
       </div>
     </UCard>
 
-    <!-- Chart positions -->
     <template v-else-if="chartJson">
       <!-- Big Three -->
-      <div class="space-y-3">
-        <!-- Sun -->
-        <UCard
-          variant="outline"
-          :ui="{ root: `card-mystical border ${getElementBgColor(chartJson.sun.sign)}` }"
-        >
-          <div class="flex items-center gap-4">
-            <div
-              class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border"
-              :class="getElementBgColor(chartJson.sun.sign)"
-            >
-              {{ getSignIcon(chartJson.sun.sign) }}
-            </div>
-            <div class="flex-1">
-              <p class="text-xs uppercase tracking-wider" :class="getElementColor(chartJson.sun.sign)">
-                ☀️ {{ t('report.planets.sun') }}
-              </p>
-              <p class="text-lg font-bold text-white">{{ translateSign(chartJson.sun.sign) }}</p>
-              <p class="text-xs text-violet-400">
-                {{ chartJson.sun.degree }}° · {{ t('report.house') }} {{ chartJson.sun.house }}
-              </p>
-            </div>
+      <UCard variant="outline" :ui="{ root: 'card-mystical glow-border' }">
+        <h3 class="text-sm font-semibold text-violet-300 uppercase tracking-wider mb-3 text-center">
+          ✨ Большая тройка
+        </h3>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="text-center p-3 rounded-xl border" :class="getElementBgColor(chartJson.sun.sign)">
+            <p class="text-2xl mb-1">{{ getSignIcon(chartJson.sun.sign) }}</p>
+            <p class="text-[10px] uppercase tracking-wider" :class="getElementColor(chartJson.sun.sign)">
+              ☀️ {{ t('report.planets.sun') }}
+            </p>
+            <p class="text-sm font-bold text-white">{{ translateSign(chartJson.sun.sign) }}</p>
           </div>
-        </UCard>
+          <div class="text-center p-3 rounded-xl border" :class="getElementBgColor(chartJson.moon.sign)">
+            <p class="text-2xl mb-1">{{ getSignIcon(chartJson.moon.sign) }}</p>
+            <p class="text-[10px] uppercase tracking-wider" :class="getElementColor(chartJson.moon.sign)">
+              🌙 {{ t('report.planets.moon') }}
+            </p>
+            <p class="text-sm font-bold text-white">{{ translateSign(chartJson.moon.sign) }}</p>
+          </div>
+          <div class="text-center p-3 rounded-xl border" :class="getElementBgColor(chartJson.ascendant.sign)">
+            <p class="text-2xl mb-1">{{ getSignIcon(chartJson.ascendant.sign) }}</p>
+            <p class="text-[10px] uppercase tracking-wider" :class="getElementColor(chartJson.ascendant.sign)">
+              ⬆️ {{ t('report.planets.ascendant') }}
+            </p>
+            <p class="text-sm font-bold text-white">{{ translateSign(chartJson.ascendant.sign) }}</p>
+          </div>
+        </div>
+      </UCard>
 
-        <!-- Moon -->
-        <UCard
-          variant="outline"
-          :ui="{ root: `card-mystical border ${getElementBgColor(chartJson.moon.sign)}` }"
-        >
-          <div class="flex items-center gap-4">
-            <div
-              class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border"
-              :class="getElementBgColor(chartJson.moon.sign)"
-            >
-              {{ getSignIcon(chartJson.moon.sign) }}
-            </div>
-            <div class="flex-1">
-              <p class="text-xs uppercase tracking-wider" :class="getElementColor(chartJson.moon.sign)">
-                🌙 {{ t('report.planets.moon') }}
-              </p>
-              <p class="text-lg font-bold text-white">{{ translateSign(chartJson.moon.sign) }}</p>
-              <p class="text-xs text-violet-400">
-                {{ chartJson.moon.degree }}° · {{ t('report.house') }} {{ chartJson.moon.house }}
-              </p>
+      <!-- Other planets -->
+      <UCard v-if="otherPlanets.length" variant="outline" :ui="{ root: 'card-mystical' }">
+        <h3 class="text-sm font-semibold text-violet-300 uppercase tracking-wider mb-3">
+          🪐 Планеты
+        </h3>
+        <div class="grid grid-cols-2 gap-2">
+          <div
+            v-for="planet in otherPlanets"
+            :key="planet.name"
+            class="flex items-center gap-2 p-2 rounded-lg bg-white/5 border border-white/10"
+          >
+            <span class="text-lg">{{ getPlanetEmoji(planet.name) }}</span>
+            <div class="min-w-0">
+              <p class="text-xs text-violet-400">{{ translatePlanet(planet.name) }}</p>
+              <p class="text-sm font-medium text-white truncate">{{ translateSign(planet.sign) }}</p>
             </div>
           </div>
-        </UCard>
+        </div>
+      </UCard>
 
-        <!-- Ascendant -->
-        <UCard
-          variant="outline"
-          :ui="{ root: `card-mystical border ${getElementBgColor(chartJson.ascendant.sign)}` }"
-        >
-          <div class="flex items-center gap-4">
-            <div
-              class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border"
-              :class="getElementBgColor(chartJson.ascendant.sign)"
-            >
-              {{ getSignIcon(chartJson.ascendant.sign) }}
-            </div>
-            <div class="flex-1">
-              <p class="text-xs uppercase tracking-wider" :class="getElementColor(chartJson.ascendant.sign)">
-                ⬆️ {{ t('report.planets.ascendant') }}
-              </p>
-              <p class="text-lg font-bold text-white">{{ translateSign(chartJson.ascendant.sign) }}</p>
-              <p class="text-xs text-violet-400">{{ chartJson.ascendant.degree }}°</p>
-            </div>
-          </div>
-        </UCard>
-      </div>
+      <!-- Full report content -->
+      <UCard v-if="renderedReport" variant="outline" :ui="{ root: 'card-mystical' }">
+        <div class="flex items-center gap-2 mb-4">
+          <UBadge color="primary" variant="subtle" size="sm">Premium</UBadge>
+          <h3 class="text-sm font-semibold text-white">Полный разбор карты</h3>
+        </div>
+        <div class="prose prose-invert prose-sm max-w-none text-violet-100/90" v-html="renderedReport" />
+      </UCard>
 
       <!-- CTA -->
-      <UCard
-        variant="outline"
-        :ui="{ root: 'card-mystical border-violet-500/40' }"
-      >
+      <UCard variant="outline" :ui="{ root: 'card-mystical border-violet-500/40' }">
         <div class="text-center py-3">
           <p class="text-base font-bold text-white mb-1">Узнай свой космический код</p>
           <p class="text-sm text-violet-300/80 mb-4">

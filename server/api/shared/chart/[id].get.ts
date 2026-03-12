@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
     const { data: chart } = await supabase
         .from('birth_charts')
-        .select('id, birth_city, birth_date, chart_json')
+        .select('id, birth_city, birth_date, chart_json, user_id')
         .eq('id', chartId)
         .single()
 
@@ -16,5 +16,14 @@ export default defineEventHandler(async (event) => {
         throw createError({ statusCode: 404, statusMessage: 'Chart not found' })
     }
 
-    return { chart }
+    // Fetch full report if available (show to friend to entice them)
+    const { data: fullReport } = await supabase
+        .from('reports')
+        .select('content, type')
+        .eq('birth_chart_id', chartId)
+        .eq('user_id', chart.user_id)
+        .eq('type', 'full')
+        .maybeSingle()
+
+    return { chart, fullReport: fullReport || null }
 })
