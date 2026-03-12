@@ -21,7 +21,7 @@ export function useShare() {
         const moon = translateSign(chartJson.moon.sign)
         const asc = translateSign(chartJson.ascendant.sign)
         const text = `🌌 Моя натальная карта\n\n☀️ Солнце: ${sun} | 🌙 Луна: ${moon} | ⬆️ Асцендент: ${asc}\n\nСмотри мою карту 👇`
-        share(text, `chart-${chartId}`)
+        share(text, `chart_${chartId.replace(/-/g, '')}`)
     }
 
     function shareCompatibility(report: {
@@ -34,7 +34,7 @@ export function useShare() {
         const text = names
             ? `💫 ${names} — совместимость ${report.scores.overall}%\n\nЭмоции · Страсть · Общение · Ценности\n\nПосмотри наш результат 👇`
             : `💫 Наша совместимость: ${report.scores.overall}%\n\nЭмоции · Страсть · Общение · Ценности\n\nПосмотри результат 👇`
-        share(text, `compat-${report.id}`)
+        share(text, `compat_${report.id.replace(/-/g, '')}`)
     }
 
     function shareTarot(cards: Array<{ name: string }>, _question: string) {
